@@ -21,7 +21,6 @@ export default function Page({ messages }: { messages: Message[] }) {
     <div className="absolute bottom-0 top-0 w-full">
       <div
         ref={scrollRef}
-        className=""
       >
         <div className="mx-auto flex w-full max-w-3xl flex-col space-y-12 p-4 pb-8">
           {messages.map((message) => {

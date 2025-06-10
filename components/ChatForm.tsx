@@ -1,6 +1,5 @@
 'use client'
 
-import { db } from '@/lib/instant';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useRef, useState } from "react";
@@ -28,7 +27,6 @@ export default function ChatForm({
     const streamText = () => {
       if (currentIndex < text.length) {
         setOutput([...output, <span key={`${Date.now()}`}>{text[currentIndex]}</span>]);
-        //updateMessage(answerId, [...output, <span key={`${Date.now()}`}>{buffer}</span>]);
         setCurrentIndex(currentIndex + 1);
       }
     };
@@ -111,7 +109,6 @@ export default function ChatForm({
           }
           setStreamingDone(true);
         }
-
       } catch (error) {
         console.error('Error:', error);
       }

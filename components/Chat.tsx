@@ -36,7 +36,7 @@ export default function Chat({ messages }: { messages: Message[] }) {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex justify-start chat-content">
+                  <div className="flex justify-start">
                     <div className="group relative w-full max-w-full break-words">
                       <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0">
                         {message.text}

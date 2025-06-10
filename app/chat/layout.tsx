@@ -4,6 +4,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { chats } from "@/lib/example";
 import Chat from "@/components/Chat";
+import ChatForm from "@/components/ChatForm";
 import { usePathname } from "next/navigation";
 
 export default function Layout() {
@@ -18,6 +19,7 @@ export default function Layout() {
       <AppSidebar chats={chats} />
       <main className="relative flex w-full flex-1 flex-col overflow-hidden transition-[width,height]">
         <Chat messages={messages} />
+        <ChatForm messages={messages} />
       </main>
     </SidebarProvider>
   );

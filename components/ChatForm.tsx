@@ -1,11 +1,49 @@
 'use client'
 
+import { db } from "@/lib/instant";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useRef, useState } from "react";
 import { id } from '@instantdb/react';
 import { usePathname } from 'next/navigation';
 import { ArrowUp } from 'lucide-react';
+
+function startChat(id: string, title: string) {
+  const cookies = document.cookie.split(';');
+  const userIdCookie = cookies.find(cookie => cookie.trim().startsWith('g6_session='));
+  const extractedUserId = userIdCookie ? userIdCookie.split('=')[1].trim() : '';
+  db.transact(
+    db.tx.chats[id].update({
+      urlId: id,
+      sessionId: extractedUserId,
+      title
+    }),
+  );
+}
+
+function addMessage(text: string, type: string, chatId: string, answerId?: string) {
+  db.transact(
+    db.tx.messages[answerId || id()].update({
+      chatId,
+      text,
+      type,
+    }).link({ chats: chatId }),
+  );
+}
+
+function updateMessage(id: string, content: React.ReactNode[]) {
+  db.transact(
+    db.tx.messages[id].update({
+      text: content.map(node => {
+      if (React.isValidElement(node)) {
+        const props = node.props as { children: string };
+        return String(props.children || '');
+      }
+      return String(node || '');
+    }).join(''),
+    }),
+  );
+}
 
 export default function ChatForm({
   messages,
@@ -19,39 +57,26 @@ export default function ChatForm({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [streamingDone, setStreamingDone] = useState(true);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const requestRef = useRef<number>(null);
   const [answerId, setAnswerId] = useState('');
   const [output, setOutput] = useState<React.ReactNode[]>([]);
 
   useEffect(() => {
-    const streamText = () => {
-      if (currentIndex < text.length) {
-        setOutput([...output, <span key={`${Date.now()}`}>{text[currentIndex]}</span>]);
-        setCurrentIndex(currentIndex + 1);
-      }
-    };
-
     if (text.length === 0) return;
+    if (currentIndex >= text.length) return;
     if (streamingDone && currentIndex === text.length) {
       setOutput([]);
       setText('');
       setCurrentIndex(0);
     };
 
-    const startStreaming = () => {
-      requestRef.current = requestAnimationFrame(() => {
-        streamText();
-      });
-    };
+    const timer = setTimeout(() => {
+      setOutput([...output, <span key={`${Date.now()}`}>{text[currentIndex]}</span>]);
+      updateMessage(answerId, [...output, <span key={`${Date.now()}`}>{text[currentIndex]}</span>]);
+      setCurrentIndex(currentIndex + 1);
+    }, 1);
+    return () => clearTimeout(timer);
 
-    startStreaming();
-
-    return () => {
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
-      }
-    };
-  }, [text, currentIndex, answerId, setOutput, streamingDone, output]);
+  }, [text, currentIndex]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (
@@ -73,9 +98,12 @@ export default function ChatForm({
     if (pageChatId === 'chat') {
         pageChatId = id();
         window.history.pushState({}, '', window.location.href + `/${pageChatId}`);
+        startChat(pageChatId, input);
     }
     const newAnswerId = id();
     setAnswerId(newAnswerId);
+    addMessage(input, 'question', pageChatId);
+    addMessage('. . .', 'answer', pageChatId, newAnswerId);
     setInput('');
     setStreamingDone(false);
     try {

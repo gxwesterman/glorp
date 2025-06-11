@@ -28,7 +28,11 @@ export function AppSidebar({ chats }: { chats: Chat[] }) {
     chat: Chat
   ) => {
     e.stopPropagation();
-    console.log(chat);
+    db.transact(db.tx.chats[chat.id].delete());
+    db.transact(chat.messages.map((m) => db.tx.messages[m.id].delete()));
+    if (activeUrlId === chat.urlId) {
+      window.history.pushState({}, "", "/chat");
+    }
   };
 
   const handleClick = (urlId: string) => {

@@ -2,7 +2,7 @@ export type Message = {
   id: string;
   chatId: string;
   text: string;
-  type: 'question' | 'answer',
+  type: string,
 }
 
 export type Chat = {

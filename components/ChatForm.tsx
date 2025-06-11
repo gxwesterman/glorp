@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { id } from '@instantdb/react';
 import { usePathname } from 'next/navigation';
 import { ArrowUp } from 'lucide-react';
+import { useChat } from "@/contexts/ChatContext";
 
 function startChat(id: string, title: string) {
   const cookies = document.cookie.split(';');
@@ -21,24 +22,6 @@ function startChat(id: string, title: string) {
   );
 }
 
-function addMessage(text: string, type: string, chatId: string, answerId?: string) {
-  db.transact(
-    db.tx.messages[answerId || id()].update({
-      chatId,
-      text,
-      type,
-    }).link({ chats: chatId }),
-  );
-}
-
-function updateMessage(id: string, content: string) {
-  db.transact(
-    db.tx.messages[id].update({
-      text: content
-    }),
-  );
-}
-
 export default function ChatForm({
   messages,
 }: {
@@ -49,6 +32,7 @@ export default function ChatForm({
   const [input, setInput] = useState('');
   const [streamingDone, setStreamingDone] = useState(true);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const { streams, startStream } = useChat();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (
@@ -72,45 +56,7 @@ export default function ChatForm({
         window.history.pushState({}, '', window.location.href + `/${pageChatId}`);
         startChat(pageChatId, input);
     }
-    const newAnswerId = id();
-    addMessage(input, 'question', pageChatId);
-    addMessage('', 'answer', pageChatId, newAnswerId);
-    setInput('');
-    setStreamingDone(false);
-    try {
-        const response = await fetch('/api', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: input,
-            messages: messages,
-            chatId: pageChatId,
-          }),
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to get AI response');
-        }
-
-        if (response.body) {
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-          let done = false;
-          let result = '';
-            
-          while (!done) {
-            const { value, done: readerDone } = await reader.read();
-            done = readerDone;
-            result += decoder.decode(value, { stream: true });
-            updateMessage(newAnswerId, result);
-          }
-          setStreamingDone(true);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
+    startStream(pageChatId, input, messages);
   }
 
   const handleChange = (input: string) => {

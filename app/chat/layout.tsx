@@ -7,6 +7,7 @@ import Chat from "@/components/Chat";
 import ChatForm from "@/components/ChatForm";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ChatProvider } from "@/contexts/ChatContext";
 
 export default function Layout() {
 
@@ -42,10 +43,12 @@ export default function Layout() {
   return (
     <SidebarProvider>
       <AppSidebar chats={data.chats} />
-      <main className="relative flex w-full flex-1 flex-col overflow-hidden transition-[width,height]">
-        <Chat messages={messages} />
-        <ChatForm messages={messages} />
-      </main>
+      <ChatProvider>
+        <main className="relative flex w-full flex-1 flex-col overflow-hidden transition-[width,height]">
+          <Chat messages={messages} />
+          <ChatForm messages={messages} />
+        </main>
+      </ChatProvider>
     </SidebarProvider>
   );
 }

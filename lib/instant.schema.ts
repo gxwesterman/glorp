@@ -17,6 +17,12 @@ const schema = i.schema({
       type: i.string(),
     }),
   },
+  links: {
+    messageChat: {
+      forward: { on: 'messages', has: 'one', label: 'chats' },
+      reverse: { on: 'chats', has: 'many', label: 'messages' },
+    }
+  }
 });
 
 export default schema;

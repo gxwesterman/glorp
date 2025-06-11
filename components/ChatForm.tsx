@@ -31,16 +31,10 @@ function addMessage(text: string, type: string, chatId: string, answerId?: strin
   );
 }
 
-function updateMessage(id: string, content: React.ReactNode[]) {
+function updateMessage(id: string, content: string) {
   db.transact(
     db.tx.messages[id].update({
-      text: content.map(node => {
-      if (React.isValidElement(node)) {
-        const props = node.props as { children: string };
-        return String(props.children || '');
-      }
-      return String(node || '');
-    }).join(''),
+      text: content
     }),
   );
 }
@@ -53,30 +47,8 @@ export default function ChatForm({
   const pathname = usePathname();
   let pageChatId = (pathname.split('/').pop() || '');
   const [input, setInput] = useState('');
-  const [text, setText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [streamingDone, setStreamingDone] = useState(true);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [answerId, setAnswerId] = useState('');
-  const [output, setOutput] = useState<React.ReactNode[]>([]);
-
-  useEffect(() => {
-    if (text.length === 0) return;
-    if (currentIndex >= text.length) return;
-    if (streamingDone && currentIndex === text.length) {
-      setOutput([]);
-      setText('');
-      setCurrentIndex(0);
-    };
-
-    const timer = setTimeout(() => {
-      setOutput([...output, <span key={`${Date.now()}`}>{text[currentIndex]}</span>]);
-      updateMessage(answerId, [...output, <span key={`${Date.now()}`}>{text[currentIndex]}</span>]);
-      setCurrentIndex(currentIndex + 1);
-    }, 1);
-    return () => clearTimeout(timer);
-
-  }, [text, currentIndex]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (
@@ -101,9 +73,8 @@ export default function ChatForm({
         startChat(pageChatId, input);
     }
     const newAnswerId = id();
-    setAnswerId(newAnswerId);
     addMessage(input, 'question', pageChatId);
-    addMessage('. . .', 'answer', pageChatId, newAnswerId);
+    addMessage('', 'answer', pageChatId, newAnswerId);
     setInput('');
     setStreamingDone(false);
     try {
@@ -133,7 +104,7 @@ export default function ChatForm({
             const { value, done: readerDone } = await reader.read();
             done = readerDone;
             result += decoder.decode(value, { stream: true });
-            setText(result);
+            updateMessage(newAnswerId, result);
           }
           setStreamingDone(true);
         }

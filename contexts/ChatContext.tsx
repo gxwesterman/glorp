@@ -1,6 +1,6 @@
 import { db } from "@/lib/instant";
 import { id } from "@instantdb/react";
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 
 function addMessage(text: string, type: string, chatId: string, answerId?: string) {
   db.transact(
@@ -21,12 +21,10 @@ function updateMessage(id: string, content: string) {
 }
 
 type ChatProviderState = {
-  streams: { chatId: string, text: string, status: string }[],
   startStream: (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => Promise<void>
 }
 
 const initialState: ChatProviderState = {
-  streams: [],
   startStream: async () => undefined,
 }
 
@@ -36,12 +34,11 @@ export function ChatProvider({
   children,
   ...props
 }: { children: React.ReactNode }) {
-
-  const [streams, setStreams] = useState([]);
+  
   const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {
     const newAnswerId = id();
     addMessage(input, 'question', chatId);
-    addMessage('', 'answer', chatId, newAnswerId);
+    addMessage('. . .', 'answer', chatId, newAnswerId);
     try {
         const response = await fetch('/api', {
           method: 'POST',
@@ -64,7 +61,7 @@ export function ChatProvider({
           const decoder = new TextDecoder();
           let done = false;
           let result = '';
-            
+
           while (!done) {
             const { value, done: readerDone } = await reader.read();
             done = readerDone;
@@ -78,7 +75,7 @@ export function ChatProvider({
   }
 
   return (
-    <ChatProviderContext.Provider {...props} value={{ streams, startStream }}>
+    <ChatProviderContext.Provider {...props} value={{ startStream }}>
       {children}
     </ChatProviderContext.Provider>
   )

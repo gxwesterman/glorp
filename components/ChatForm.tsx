@@ -32,7 +32,7 @@ export default function ChatForm({
   const [input, setInput] = useState('');
   const [streamingDone, setStreamingDone] = useState(true);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { streams, startStream } = useChat();
+  const { startStream } = useChat();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (
@@ -56,6 +56,7 @@ export default function ChatForm({
         window.history.pushState({}, '', window.location.href + `/${pageChatId}`);
         startChat(pageChatId, input);
     }
+    setInput('');
     startStream(pageChatId, input, messages);
   }
 

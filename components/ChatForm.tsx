@@ -3,7 +3,7 @@
 import { db } from "@/lib/instant";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { id } from '@instantdb/react';
 import { usePathname } from 'next/navigation';
 import { ArrowUp } from 'lucide-react';
@@ -22,17 +22,13 @@ function startChat(id: string, title: string) {
   );
 }
 
-export default function ChatForm({
-  messages,
-}: {
-  messages: { [x: string]: string; id: string; }[],
-}) {
+export default function ChatForm() {
   const pathname = usePathname();
   let pageChatId = (pathname.split('/').pop() || '');
   const [input, setInput] = useState('');
   const [streamingDone, setStreamingDone] = useState(true);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { startStream } = useChat();
+  const { messages, startStream } = useChat();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (

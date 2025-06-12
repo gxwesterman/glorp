@@ -12,8 +12,11 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Chat } from "@/lib/types";
+import { useChat } from "@/contexts/ChatContext";
 
-export function AppSidebar({ chats }: { chats: Chat[] }) {
+export function AppSidebar() {
+
+  const { chats } = useChat();
   const pathname = usePathname();
   const [activeUrlId, setActiveUrlId] = useState(
     pathname.split("/").pop() || ""

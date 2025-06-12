@@ -2,9 +2,11 @@
 
 import React, { useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Message } from "@/lib/types";
+import { useChat } from "@/contexts/ChatContext";
 
-export default function Chat({ messages }: { messages: Message[] }) {
+export default function Chat() {
+
+  const { messages } = useChat();
   const pathname = usePathname();
   const scrollRef = useRef<HTMLDivElement>(null);
 

@@ -18,8 +18,7 @@ export async function POST(req: Request) {
   const stream = new ReadableStream({
     async start(controller) {
       for await (const chunk of result) {
-        const chunkText = await chunk.text;
-        controller.enqueue(chunkText);
+        controller.enqueue(chunk.text);
       }
       controller.close();
     },

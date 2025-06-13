@@ -63,12 +63,9 @@ export function ChatProvider({
     },
   };
 
-  const { isLoading, error, data } = db.useQuery(chatsQuery);
-  if (isLoading) return <div></div>;
-  if (error) return <div>Error fetching data: {error.message}</div>;
-
-  const chats = data.chats;
-  const chat = chats.find((chat) => chat.urlId === pageChatId);
+  const { data } = db.useQuery(chatsQuery);
+  const chats = data?.chats;
+  const chat = chats?.find((chat) => chat.urlId === pageChatId);
   const messages = chat ? chat.messages : [];
 
   const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {
@@ -102,7 +99,7 @@ export function ChatProvider({
           while (!done) {
             const { value, done: readerDone } = await reader.read();
             done = readerDone;
-            result = decoder.decode(value, { stream: true });
+            result += decoder.decode(value, { stream: true });
             updateMessage(newAnswerId, result);
           }
         }
@@ -110,6 +107,8 @@ export function ChatProvider({
         console.error('Error:', error);
       }
   }
+
+  if (!chats) return;
 
   return (
     <ChatProviderContext.Provider {...props} value={{ startStream, chats, messages }}>

@@ -26,7 +26,6 @@ export default function ChatForm() {
   const pathname = usePathname();
   let pageChatId = (pathname.split('/').pop() || '');
   const [input, setInput] = useState('');
-  const [streamingDone, setStreamingDone] = useState(true);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { messages, startStream } = useChat();
 
@@ -41,7 +40,7 @@ export default function ChatForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!streamingDone || input === '') {
+    if (input === '') {
       return;
     }
     if (textAreaRef.current) {

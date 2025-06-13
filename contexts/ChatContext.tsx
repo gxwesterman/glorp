@@ -4,20 +4,29 @@ import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react"
 import { Chat, Message } from "@/lib/types";
 
-function addMessage(text: string, type: string, chatId: string, answerId?: string) {
+function addMessage(text: string, type: string, chatId: string, answerId?: string, status?: string) {
   db.transact(
     db.tx.messages[answerId || id()].update({
       chatId,
       text,
       type,
+      status,
     }).link({ chats: chatId }),
   );
 }
 
-function updateMessage(id: string, content: string) {
+function updateMessage(id: string, text: string) {
   db.transact(
     db.tx.messages[id].update({
-      text: content
+      text,
+    }),
+  );
+}
+
+function finishAnswer(id: string) {
+  db.transact(
+    db.tx.messages[id].update({
+      status: "done"
     }),
   );
 }
@@ -71,7 +80,7 @@ export function ChatProvider({
   const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {
     const newAnswerId = id();
     addMessage(input, 'question', chatId);
-    addMessage('. . .', 'answer', chatId, newAnswerId);
+    addMessage('. . .', 'answer', chatId, newAnswerId, 'streaming');
 
     try {
         const response = await fetch('/api', {
@@ -102,6 +111,7 @@ export function ChatProvider({
             result += decoder.decode(value, { stream: true });
             updateMessage(newAnswerId, result);
           }
+          finishAnswer(newAnswerId)
         }
       } catch (error) {
         console.error('Error:', error);

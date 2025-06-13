@@ -15,6 +15,7 @@ const schema = i.schema({
       chatId: i.string(),
       text: i.string(),
       type: i.string(),
+      status: i.string().optional(),
     }),
   },
   links: {

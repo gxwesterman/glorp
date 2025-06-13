@@ -3,6 +3,7 @@ export type Message = {
   chatId: string;
   text: string;
   type: string,
+  status?: string,
 }
 
 export type Chat = {

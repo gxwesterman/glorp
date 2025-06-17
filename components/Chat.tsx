@@ -1,14 +1,17 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useChat } from "@/contexts/ChatContext";
+import ReactMarkdown from "react-markdown";
 
 export default function Chat() {
 
   const { messages } = useChat();
   const pathname = usePathname();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [stream, setStream] = useState<React.ReactNode[]>([]);
+  const streamingAnswer = messages.find(message => message.status === "streaming");
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -38,13 +41,24 @@ export default function Chat() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex justify-start">
-                    <div className="group relative w-full max-w-full break-words">
-                      <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0">
-                        {message.text}
+                  message.status === "streaming" ?
+                  (
+                    <div className="flex justify-start">
+                      <div className="group relative w-full max-w-full break-words">
+                        <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0">
+                          {stream}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="flex justify-start">
+                      <div className="group relative w-full max-w-full break-words">
+                        <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0">
+                          <ReactMarkdown>{message.text}</ReactMarkdown>
+                        </div>
+                      </div>
+                    </div>
+                  )
                 )}
               </div>
             );

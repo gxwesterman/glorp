@@ -34,12 +34,14 @@ function finishAnswer(id: string) {
 type ChatProviderState = {
   chats: Chat[],
   messages: Message[],
+  deleteChat: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, chat: Chat) => void,
   startStream: (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => Promise<void>
 }
 
 const initialState: ChatProviderState = {
   chats: [],
   messages: [],
+  deleteChat: () => undefined,
   startStream: async () => undefined,
 }
 
@@ -76,11 +78,21 @@ export function ChatProvider({
   const chats = data?.chats;
   const chat = chats?.find((chat) => chat.urlId === pageChatId);
   const messages = chat ? chat.messages : [];
+  const [wasChatPresent, setWasChatPresent] = useState<boolean>(false);
+
+  const deleteChat = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    chat: Chat
+  ) => {
+    e.stopPropagation();
+    db.transact(db.tx.chats[chat.id].delete());
+    db.transact(chat.messages.map((m) => db.tx.messages[m.id].delete()));
+  };
 
   const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {
     const newAnswerId = id();
     addMessage(input, 'question', chatId);
-    addMessage('. . .', 'answer', chatId, newAnswerId, 'streaming');
+    addMessage('', 'answer', chatId, newAnswerId, 'streaming');
 
     try {
         const response = await fetch('/api', {
@@ -118,10 +130,19 @@ export function ChatProvider({
       }
   }
 
+  useEffect(() => {
+    if (chat) {
+      setWasChatPresent(true);
+    }
+    if (wasChatPresent && !chat && pageChatId !== 'chat') {
+      window.history.pushState({}, "", "/chat");
+    }
+  }, [chat, pageChatId, wasChatPresent]);
+
   if (!chats) return;
 
   return (
-    <ChatProviderContext.Provider {...props} value={{ startStream, chats, messages }}>
+    <ChatProviderContext.Provider {...props} value={{ startStream, deleteChat, chats, messages }}>
       {children}
     </ChatProviderContext.Provider>
   )

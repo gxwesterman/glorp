@@ -7,41 +7,20 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { db } from "@/lib/instant";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { X } from "lucide-react";
-import { Chat } from "@/lib/types";
 import { useChat } from "@/contexts/ChatContext";
 
 export function AppSidebar() {
 
-  const { chats } = useChat();
+  const { chats, deleteChat } = useChat();
   const pathname = usePathname();
-  const [activeUrlId, setActiveUrlId] = useState(
-    pathname.split("/").pop() || ""
-  );
-
-  useEffect(() => {
-    setActiveUrlId(pathname.split("/").pop() || "");
+  const activeUrlId = useMemo(() => {
+    return (pathname.split("/").pop() || "");
   }, [pathname]);
 
-  const deleteChat = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    chat: Chat
-  ) => {
-    e.stopPropagation();
-    db.transact(db.tx.chats[chat.id].delete());
-    db.transact(chat.messages.map((m) => db.tx.messages[m.id].delete()));
-    if (activeUrlId === chat.urlId) {
-      window.history.pushState({}, "", "/chat");
-    }
-  };
-
   const handleClick = (urlId: string) => {
-    if (urlId !== activeUrlId) {
-      setActiveUrlId(urlId);
-    }
     if (urlId) {
       window.history.pushState({}, "", `/chat/${urlId}`);
     } else {

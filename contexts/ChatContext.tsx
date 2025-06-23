@@ -15,10 +15,11 @@ function addMessage(text: string, type: string, chatId: string, answerId?: strin
   );
 }
 
-function updateMessage(id: string, text: string) {
+function updateMessage(id: string, text: string, status: string) {
   db.transact(
     db.tx.messages[id].update({
       text,
+      status,
     }),
   );
 }
@@ -92,7 +93,7 @@ export function ChatProvider({
   const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {
     const newAnswerId = id();
     addMessage(input, 'question', chatId);
-    addMessage('', 'answer', chatId, newAnswerId, 'streaming');
+    addMessage('', 'answer', chatId, newAnswerId, 'pending');
 
     try {
         const response = await fetch('/api', {
@@ -121,7 +122,7 @@ export function ChatProvider({
             const { value, done: readerDone } = await reader.read();
             done = readerDone;
             result += decoder.decode(value, { stream: true });
-            updateMessage(newAnswerId, result);
+            updateMessage(newAnswerId, result, "streaming");
           }
           finishAnswer(newAnswerId)
         }

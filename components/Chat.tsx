@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useChat } from "@/contexts/ChatContext";
 import ReactMarkdown from "react-markdown";

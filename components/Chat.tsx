@@ -44,7 +44,7 @@ export default function Chat() {
                 {message.type === "question" ? (
                   <div className="flex justify-end">
                     <div className="group relative inline-block max-w-[80%] break-words rounded-2xl border border-secondary/50 bg-secondary/50 p-4 text-left">
-                      <div className="prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0">
+                      <div className="prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0 dark:prose-invert">
                         {message.text}
                       </div>
                     </div>
@@ -58,7 +58,7 @@ export default function Chat() {
                   (
                     <div className="flex justify-start">
                       <div className="group relative w-full max-w-full break-words">
-                        <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0">
+                        <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0 dark:prose-invert">
                           <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{streamingAnswer?.text}</ReactMarkdown>
                         </div>
                       </div>
@@ -66,7 +66,7 @@ export default function Chat() {
                   ) : (
                     <div className="flex justify-start">
                       <div className="group relative w-full max-w-full break-words">
-                        <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0">
+                        <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0 dark:prose-invert">
                           <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{message.text}</ReactMarkdown>
                         </div>
                       </div>

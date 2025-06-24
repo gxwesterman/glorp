@@ -74,7 +74,7 @@ export default function ChatForm() {
               <Textarea
                 ref={textAreaRef}
                 name="message"
-                className="font-semibold grow resize-none border-none outline-none text-base shadow-none focus-visible:ring-0 max-h-80"
+                className="dark:bg-transparent font-semibold grow resize-none border-none outline-none text-base shadow-none focus-visible:ring-0 max-h-80"
                 placeholder="Type your message here..."
                 onKeyDown={handleKeyDown}
                 value={input}

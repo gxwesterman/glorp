@@ -6,81 +6,32 @@ import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react"
 import { Chat, Message } from "@/lib/types";
 
-const resumeStream = async (answerId: string, question: string, messages: { [x: string]: string; id: string; }[]) => {
-    try {
-        const response = await fetch('/api', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: question,
-            messages: messages,
-          }),
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to get AI response');
-        }
+const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {
+  const newAnswerId = id();
+  addMessage(input, 'question', chatId);
+  addMessage('', 'answer', chatId, newAnswerId, 'pending');
 
-        if (response.body) {
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-          let done = false;
-          let result = '';
+  try {
+      const response = await fetch('/api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          answerId: newAnswerId,
+          message: input,
+          messages: messages,
+        }),
+      });
 
-          while (!done) {
-            const { value, done: readerDone } = await reader.read();
-            done = readerDone;
-            result += decoder.decode(value, { stream: true });
-            updateMessage(answerId, result, "streaming");
-          }
-          finishAnswer(answerId)
-        }
-      } catch (error) {
-        console.error('Error:', error);
+      if (!response.ok) {
+        throw new Error('Failed to get AI response');
       }
-  }
 
-  const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {
-    const newAnswerId = id();
-    addMessage(input, 'question', chatId);
-    addMessage('', 'answer', chatId, newAnswerId, 'pending');
-
-    try {
-        const response = await fetch('/api', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: input,
-            messages: messages,
-          }),
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to get AI response');
-        }
-
-        if (response.body) {
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-          let done = false;
-          let result = '';
-
-          while (!done) {
-            const { value, done: readerDone } = await reader.read();
-            done = readerDone;
-            result += decoder.decode(value, { stream: true });
-            updateMessage(newAnswerId, result, "streaming");
-          }
-          finishAnswer(newAnswerId)
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-  }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+}
 
 function addMessage(text: string, type: string, chatId: string, answerId?: string, status?: string) {
   db.transact(
@@ -93,29 +44,11 @@ function addMessage(text: string, type: string, chatId: string, answerId?: strin
   );
 }
 
-function updateMessage(id: string, text: string, status: string) {
-  db.transact(
-    db.tx.messages[id].update({
-      text,
-      status,
-    }),
-  );
-}
-
-function finishAnswer(id: string) {
-  db.transact(
-    db.tx.messages[id].update({
-      status: "done"
-    }),
-  );
-}
-
 type ChatProviderState = {
   chats: Chat[],
   messages: Message[],
   deleteChat: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, chat: Chat) => void,
   startStream: (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => Promise<void>
-  resumeStream: (answerId: string, question: string, messages: { [x: string]: string; id: string; }[]) => Promise<void>
 }
 
 const initialState: ChatProviderState = {
@@ -123,7 +56,6 @@ const initialState: ChatProviderState = {
   messages: [],
   deleteChat: () => undefined,
   startStream: async () => undefined,
-  resumeStream: async () => undefined,
 }
 
 const deleteChat = (
@@ -168,8 +100,8 @@ export function ChatProvider({
   const chats = data?.chats || [];
   const chat = chats?.find((chat) => chat.urlId === pageChatId);
   const messages = chat ? chat.messages : [];
-  // const unfinishedAnswer = messages?.find(message => message.status === 'pending' || message.status === 'streaming');
-  // const unAnsweredQuestion = messages.filter(message => message.type === 'question').slice(-1)[0];
+  const unfinishedAnswer = messages?.find(message => message.status === 'pending' || message.status === 'streaming');
+  const unAnsweredQuestion = messages.filter(message => message.type === 'question').slice(-1)[0];
   const [wasChatPresent, setWasChatPresent] = useState<boolean>(false);
 
   useEffect(() => {
@@ -181,10 +113,10 @@ export function ChatProvider({
     }
   }, [chat, pageChatId, wasChatPresent]);
 
-  if (chat == undefined) return;
+  if (!data || (pageChatId !== 'chat' && chat === undefined)) return;
 
   return (
-    <ChatProviderContext.Provider {...props} value={{ startStream, resumeStream, deleteChat, chats, messages }}>
+    <ChatProviderContext.Provider {...props} value={{ startStream, deleteChat, chats, messages }}>
       {children}
     </ChatProviderContext.Provider>
   )

@@ -1,7 +1,25 @@
 import { GoogleGenAI } from "@google/genai";
+import { admin_db as db } from "@/lib/instant";
+
+async function updateMessage(id: string, text: string, status: string) {
+  await db.transact(
+    db.tx.messages[id].update({
+      text,
+      status,
+    }),
+  );
+}
+
+async function finishAnswer(id: string) {
+  await db.transact(
+    db.tx.messages[id].update({
+      status: "done"
+    }),
+  );
+}
 
 export async function POST(req: Request) {
-  const { message, messages } = await req.json();
+  const { answerId, message, messages } = await req.json();
 
   const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || ''} );
   const chat = ai.chats.create({
@@ -14,20 +32,14 @@ export async function POST(req: Request) {
     })
   })
     
-  const result = await chat.sendMessageStream({ message: message });
-  const stream = new ReadableStream({
-    async start(controller) {
-      for await (const chunk of result) {
-        controller.enqueue(chunk.text);
-      }
-      controller.close();
-    },
-  });
-
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/plain',
-      'Transfer-Encoding': 'chunked',
-    },
-  });
+  const stream = await chat.sendMessageStream({ message: message });
+  let response = '';
+  for await (const chunk of stream) {
+    if (chunk.text) {
+      response += chunk.text;
+      await updateMessage(answerId, response, "streaming");
+    }
+  }
+  await finishAnswer(answerId);
+  return Response.json({ message: 'Done' })
 }

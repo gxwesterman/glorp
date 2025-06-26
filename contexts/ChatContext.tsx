@@ -12,25 +12,23 @@ const startStream = async (chatId: string, input: string, messages: { [x: string
   addMessage('', 'answer', chatId, newAnswerId, 'pending');
 
   try {
-      const response = await fetch('/api', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          answerId: newAnswerId,
-          message: input,
-          messages: messages,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to get AI response');
-      }
-
-    } catch (error) {
-      console.error('Error:', error);
+    const response = await fetch('/api', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        answerId: newAnswerId,
+        message: input,
+        messages: messages,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to get AI response');
     }
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
 
 function addMessage(text: string, type: string, chatId: string, answerId?: string, status?: string) {

@@ -28,7 +28,7 @@ export default function Branch({ chat, index, className }: { chat: Chat, index: 
         </Button>
       </TooltipTrigger>
       <TooltipContent side="bottom">
-        <p>Branch off</p>
+        <p>Branch</p>
       </TooltipContent>
     </Tooltip>
   )

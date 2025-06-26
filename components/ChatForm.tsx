@@ -1,26 +1,12 @@
 'use client'
 
-import { db } from "@/lib/instant";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import React, { useRef, useState } from "react";
-import { id } from '@instantdb/react';
 import { usePathname } from 'next/navigation';
 import { ArrowUp } from 'lucide-react';
 import { useChat } from "@/contexts/ChatContext";
-
-function startChat(id: string, title: string) {
-  const cookies = document.cookie.split(';');
-  const userIdCookie = cookies.find(cookie => cookie.trim().startsWith('g6_session='));
-  const extractedUserId = userIdCookie ? userIdCookie.split('=')[1].trim() : '';
-  db.transact(
-    db.tx.chats[id].update({
-      urlId: id,
-      sessionId: extractedUserId,
-      title
-    }),
-  );
-}
+import { startChat } from "@/lib/chat-utils";
 
 export default function ChatForm() {
   const pathname = usePathname();
@@ -47,9 +33,8 @@ export default function ChatForm() {
       textAreaRef.current.style.height = 'auto';
     }
     if (pageChatId === 'chat') {
-        pageChatId = id();
+        pageChatId = startChat(input);
         window.history.pushState({}, '', window.location.href + `/${pageChatId}`);
-        startChat(pageChatId, input);
     }
     setInput('');
     startStream(pageChatId, input, messages);

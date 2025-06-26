@@ -39,7 +39,7 @@ export default function Chat() {
         className="absolute inset-0 overflow-y-scroll pt-3.5 pb-[144px]"
       >
         <div className="mx-auto flex w-full max-w-3xl flex-col space-y-12 p-4 pb-8">
-          {messages.map((message) => {
+          {messages.map((message, index) => {
             return (
               <div key={message.id}>
                 {message.type === "question" ? (
@@ -71,7 +71,7 @@ export default function Chat() {
                           <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{message.text}</ReactMarkdown>
                         </div>
                       </div>
-                      <Branch className="opacity-0 group-hover:opacity-100" chat={chat} />
+                      <Branch className="opacity-0 group-hover:opacity-100" chat={chat} index={index} />
                     </div>
                   )
                 )}

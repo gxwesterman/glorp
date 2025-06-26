@@ -8,11 +8,16 @@ import {
 } from "@/components/ui/tooltip";
 import { startChat, addMessage } from "@/lib/chat-utils";
 
-export default function Branch({ chat, className }: { chat: Chat, className?: string }) {
+export default function Branch({ chat, index, className }: { chat: Chat, index: number, className?: string }) {
 
   function handleClick() {
+    const messages = chat.messages;
     const id = startChat("Branch from " + chat.title);
-    window.history.pushState({}, '', window.location.href + `/${id}`);
+    for (let i = 0; i <= index; i++) {
+      const message = messages[i];
+      addMessage(message.text, message.type, id);
+    }
+    window.history.pushState({}, '', `/chat/${id}`);
   }
 
   return (

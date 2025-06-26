@@ -5,6 +5,14 @@ import { id } from "@instantdb/react";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react"
 import { Chat, Message } from "@/lib/types";
+import { addMessage, deleteChat } from "@/lib/chat-utils";
+
+const defaultChat = {
+  id: "chat",
+  urlId: "chat",
+  title: "Chat",
+  messages: [],
+}
 
 const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {
   const newAnswerId = id();
@@ -31,19 +39,9 @@ const startStream = async (chatId: string, input: string, messages: { [x: string
   }
 }
 
-function addMessage(text: string, type: string, chatId: string, answerId?: string, status?: string) {
-  db.transact(
-    db.tx.messages[answerId || id()].update({
-      chatId,
-      text,
-      type,
-      status,
-    }).link({ chats: chatId }),
-  );
-}
-
 type ChatProviderState = {
   chats: Chat[],
+  chat: Chat,
   messages: Message[],
   deleteChat: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, chat: Chat) => void,
   startStream: (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => Promise<void>
@@ -51,19 +49,11 @@ type ChatProviderState = {
 
 const initialState: ChatProviderState = {
   chats: [],
+  chat: defaultChat,
   messages: [],
   deleteChat: () => undefined,
   startStream: async () => undefined,
 }
-
-const deleteChat = (
-  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  chat: Chat
-) => {
-   e.stopPropagation();
-  db.transact(db.tx.chats[chat.id].delete());
-  db.transact(chat.messages.map((m) => db.tx.messages[m.id].delete()));
-};
 
 const ChatProviderContext = createContext<ChatProviderState>(initialState)
 
@@ -95,16 +85,16 @@ export function ChatProvider({
   };
 
   const { data } = db.useQuery(chatsQuery);
-  const chats = data?.chats || [];
-  const chat = chats?.find((chat) => chat.urlId === pageChatId);
+  const chats = data?.chats ?? [];
+  const chat = chats?.find((chat) => chat.urlId === pageChatId) ?? defaultChat;
   const messages = chat ? chat.messages : [];
   const [wasChatPresent, setWasChatPresent] = useState<boolean>(false);
 
   useEffect(() => {
-    if (chat) {
+    if (chat && chat.id !== "chat") {
       setWasChatPresent(true);
     }
-    if (wasChatPresent && !chat && pageChatId !== 'chat') {
+    if (wasChatPresent && pageChatId !== "chat" && chat.id === "chat") {
       window.history.pushState({}, "", "/chat");
     }
   }, [chat, pageChatId, wasChatPresent]);
@@ -112,7 +102,7 @@ export function ChatProvider({
   if (!data || (pageChatId !== 'chat' && chat === undefined)) return;
 
   return (
-    <ChatProviderContext.Provider {...props} value={{ startStream, deleteChat, chats, messages }}>
+    <ChatProviderContext.Provider {...props} value={{ startStream, deleteChat, chat, chats, messages }}>
       {children}
     </ChatProviderContext.Provider>
   )

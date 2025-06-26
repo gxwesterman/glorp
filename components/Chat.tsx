@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 import { Dot } from "lucide-react";
 import rehypeHighlight from 'rehype-highlight'
 import Branch from "@/components/Branch";
+import Copy from "@/components/Copy";
 
 const pending = (
   <div className="flex" key="pending">
@@ -14,7 +15,7 @@ const pending = (
     <Dot className="animate-ping delay-150" />
     <Dot className="animate-ping delay-300" />
   </div>
-)
+);
 
 export default function Chat() {
 
@@ -71,7 +72,10 @@ export default function Chat() {
                           <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{message.text}</ReactMarkdown>
                         </div>
                       </div>
-                      <Branch className="opacity-0 group-hover:opacity-100" chat={chat} index={index} />
+                      <div className="space-x-1 flex">
+                        <Branch className="opacity-0 group-hover:opacity-100" chat={chat} index={index} />
+                        <Copy className="opacity-0 group-hover:opacity-100" content={message.text} />
+                      </div>
                     </div>
                   )
                 )}

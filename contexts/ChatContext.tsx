@@ -98,8 +98,6 @@ export function ChatProvider({
   const chats = data?.chats || [];
   const chat = chats?.find((chat) => chat.urlId === pageChatId);
   const messages = chat ? chat.messages : [];
-  const unfinishedAnswer = messages?.find(message => message.status === 'pending' || message.status === 'streaming');
-  const unAnsweredQuestion = messages.filter(message => message.type === 'question').slice(-1)[0];
   const [wasChatPresent, setWasChatPresent] = useState<boolean>(false);
 
   useEffect(() => {

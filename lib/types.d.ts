@@ -2,6 +2,7 @@ export type Message = {
   id: string;
   chatId: string;
   text: string;
+  html: string;
   type: string,
   status?: string,
 }

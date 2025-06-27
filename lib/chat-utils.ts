@@ -17,11 +17,12 @@ export function startChat(title: string) {
   return chatId;
 }
 
-export function addMessage(text: string, type: string, chatId: string, answerId?: string, status?: string) {
+export function addMessage(text: string, html: string, type: string, chatId: string, answerId?: string, status?: string) {
   db.transact(
     db.tx.messages[answerId || id()].update({
       chatId,
       text,
+      html,
       type,
       status,
     }).link({ chats: chatId }),

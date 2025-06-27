@@ -1,10 +1,25 @@
 import { GoogleGenAI } from "@google/genai";
 import { admin_db as db } from "@/lib/instant";
+import { marked, Tokens } from "marked";
+import { highlight } from "sugar-high";
+
+const renderer = {
+  code(tokens: Tokens.Code) {
+    const text = tokens.text;
+    return (
+      `<code><pre>${highlight(text)}</pre></code>`
+    )
+  }
+}
+
+marked.use({ renderer });
 
 async function updateMessage(id: string, text: string, status: string) {
+  const html = marked.parse(text);
   await db.transact(
     db.tx.messages[id].update({
       text,
+      html,
       status,
     }),
   );

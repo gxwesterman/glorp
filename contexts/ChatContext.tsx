@@ -16,7 +16,7 @@ const defaultChat = {
 
 const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {
   const newAnswerId = id();
-  addMessage(input, 'question', chatId);
+  addMessage(input, '', 'question', chatId);
   addMessage('', 'answer', chatId, newAnswerId, 'pending');
 
   try {
@@ -99,7 +99,7 @@ export function ChatProvider({
     }
   }, [chat, pageChatId, wasChatPresent]);
 
-  if (!data || (pageChatId !== 'chat' && chat === undefined)) return;
+  if (!data || (pageChatId !== 'chat' && chat.id === "chat")) return;
 
   return (
     <ChatProviderContext.Provider {...props} value={{ startStream, deleteChat, chat, chats, messages }}>

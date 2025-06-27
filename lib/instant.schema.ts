@@ -14,6 +14,7 @@ const schema = i.schema({
     messages: i.entity({
       chatId: i.string(),
       text: i.string(),
+      html: i.string(),
       type: i.string(),
       status: i.string().optional(),
     }),

@@ -15,7 +15,7 @@ export default function Branch({ chat, index, className }: { chat: Chat, index: 
     const id = startChat("Branch from " + chat.title);
     for (let i = 0; i <= index; i++) {
       const message = messages[i];
-      addMessage(message.text, message.type, id);
+      addMessage(message.text, message.html, message.type, id);
     }
     window.history.pushState({}, '', `/chat/${id}`);
   }

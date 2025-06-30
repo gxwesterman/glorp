@@ -17,7 +17,7 @@ const defaultChat = {
 const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {
   const newAnswerId = id();
   addMessage(input, '', 'question', chatId);
-  addMessage('', 'answer', chatId, newAnswerId, 'pending');
+  addMessage('', '', 'answer', chatId, newAnswerId, 'pending');
 
   try {
     const response = await fetch('/api', {

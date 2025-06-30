@@ -24,29 +24,11 @@ export default function Chat() {
   const streamingAnswer = messages.find(message => message.status === "streaming");
 
   useEffect(() => {
-    document.querySelectorAll('[data-code]').forEach((el) => {
-      const code = decodeURIComponent(el.getAttribute('data-code') ?? "");
-      const language = el.getAttribute('data-lang');
-      const mountPoint = document.createElement('div');
-      mountPoint.className = "items-center bg-secondary/50 flex justify-between rounded-t-md p-1";
-      el.prepend(mountPoint);
-      const root = createRoot(mountPoint);
-      root.render(
-        <>
-          <span className="font-mono text-muted-foreground ml-2">{language}</span>
-          <Copy content={code} />
-        </>
-      );
-    })
-  }, [messages]);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scroll({
-        top: scrollRef.current.scrollHeight,
-        behavior: "instant"
-      })
-    }
+    if (!scrollRef.current) return;
+    scrollRef.current.scroll({
+      top: scrollRef.current.scrollHeight,
+      behavior: "instant"
+    });
   }, [pathname]);
 
   return (

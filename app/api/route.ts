@@ -7,7 +7,7 @@ const renderer = {
   code(tokens: Tokens.Code) {
     const text = tokens.text;
     return (
-      `<code><pre>${highlight(text)}</pre></code>`
+      `<code data-lang="${tokens.lang ?? 'code'} "data-code="${encodeURIComponent(text)}"><pre>${highlight(text)}</pre></code>`
     )
   }
 }

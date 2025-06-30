@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
+import { createRoot } from "react-dom/client";
 import { usePathname } from "next/navigation";
 import { useChat } from "@/contexts/ChatContext";
 import { Dot } from "lucide-react";
 import Branch from "@/components/Branch";
 import Copy from "@/components/Copy";
-import { marked } from "marked";
+// import parse, { HTMLReactParserOptions, Element } from "html-react-parser";
 
 const pending = (
   <div className="flex" key="pending">
@@ -16,12 +17,41 @@ const pending = (
   </div>
 );
 
+// const options: HTMLReactParserOptions = {
+//   replace: (domNode) => {
+//     if (domNode instanceof Element && domNode.attribs && domNode.name === 'code') {
+//       return (
+//         <>chicken</>
+//       )
+//     }
+//   }
+// }
+
+
 export default function Chat() {
 
   const { chat, messages } = useChat();
   const pathname = usePathname();
   const scrollRef = useRef<HTMLDivElement>(null);
   const streamingAnswer = messages.find(message => message.status === "streaming");
+  const doneAnswers = messages.filter(message => message.status === "done");
+
+  useEffect(() => {
+    document.querySelectorAll('[data-code]').forEach((el) => {
+      const code = decodeURIComponent(el.getAttribute('data-code') ?? "");
+      const language = el.getAttribute('data-lang');
+      const mountPoint = document.createElement('div');
+      mountPoint.className = "items-center bg-secondary/50 flex justify-between rounded-t-md p-1";
+      el.prepend(mountPoint);
+      const root = createRoot(mountPoint);
+      root.render(
+        <>
+          <span className="font-mono text-muted-foreground ml-2">{language}</span>
+          <Copy content={code} />
+        </>
+      );
+    })
+  }, [messages]);
 
   useEffect(() => {
     if (scrollRef.current) {

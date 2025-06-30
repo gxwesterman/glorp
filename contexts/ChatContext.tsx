@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react"
 import { Chat, Message } from "@/lib/types";
 import { addMessage, deleteChat } from "@/lib/chat-utils";
+import { createRoot } from "react-dom/client";
+import Copy from "@/components/Copy";
 
 const defaultChat = {
   id: "chat",
@@ -89,6 +91,38 @@ export function ChatProvider({
   const chat = chats?.find((chat) => chat.urlId === pageChatId) ?? defaultChat;
   const messages = chat ? chat.messages : [];
   const [wasChatPresent, setWasChatPresent] = useState<boolean>(false);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const codeBlocks = document.querySelectorAll('[data-code]');
+      if (!codeBlocks?.length) return;
+
+      codeBlocks.forEach((el) => {
+        if (el.hasAttribute('data-hydrated')) return;
+        if (el.getAttribute('data-status') !== 'done') return;
+        el.setAttribute('data-hydrated', 'true');
+        const code = decodeURIComponent(el.getAttribute('data-code') ?? "");
+        const language = el.getAttribute('data-lang');
+        const mountPoint = document.createElement('div');
+        mountPoint.className = "items-center bg-secondary/50 flex justify-between rounded-t-md p-1";
+        el.prepend(mountPoint);
+        const root = createRoot(mountPoint);
+        root.render(
+          <>
+            <span className="font-mono text-muted-foreground ml-2">{language}</span>
+            <Copy content={code} />
+          </>
+        );
+      })
+    });
+
+    observer.observe(document, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (chat && chat.id !== "chat") {

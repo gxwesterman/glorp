@@ -7,15 +7,20 @@ function createRenderer(status: string) {
   return {
     code(tokens: Tokens.Code) {
       const text = tokens.text;
-      const language = tokens.lang ?? "code";
-
+      const language = tokens.lang?.trim();
+      if (language) {
+        return `
+          <code
+            data-status="${status}"
+            data-lang="${language}"
+            data-code="${encodeURIComponent(text)}"
+          >
+            <pre>${highlight(text)}</pre>
+          </code>`;
+      }
       return `
-        <code
-          data-status="${status}"
-          data-lang="${language}"
-          data-code="${encodeURIComponent(text)}"
-        >
-          <pre>${highlight(text)}</pre>
+        <code>
+          <pre>${text}</pre>
         </code>`;
     }
   };

@@ -3,16 +3,26 @@ import { admin_db as db } from "@/lib/instant";
 import { marked, Tokens } from "marked";
 import { highlight } from "sugar-high";
 
-const renderer = {
-  code(tokens: Tokens.Code) {
-    const text = tokens.text;
-    return (
-      `<code data-lang="${tokens.lang ?? 'code'}" data-code="${encodeURIComponent(text)}"><pre>${highlight(text)}</pre></code>`
-    )
-  }
+function createRenderer(status: string) {
+  return {
+    code(tokens: Tokens.Code) {
+      const text = tokens.text;
+      const language = tokens.lang ?? "code";
+
+      return `
+        <code
+          data-status="${status}"
+          data-lang="${language}"
+          data-code="${encodeURIComponent(text)}"
+        >
+          <pre>${highlight(text)}</pre>
+        </code>`;
+    }
+  };
 }
 
 async function updateMessage(id: string, text: string, status: string) {
+  const renderer = createRenderer(status);
   marked.use({ renderer });
   const html = marked.parse(text);
   await db.transact(
@@ -20,14 +30,6 @@ async function updateMessage(id: string, text: string, status: string) {
       text,
       html,
       status,
-    }),
-  );
-}
-
-async function finishAnswer(id: string) {
-  await db.transact(
-    db.tx.messages[id].update({
-      status: "done"
     }),
   );
 }
@@ -54,6 +56,6 @@ export async function POST(req: Request) {
       await updateMessage(answerId, response, "streaming");
     }
   }
-  await finishAnswer(answerId);
+  await updateMessage(answerId, response, "done");
   return Response.json({ message: 'Done' })
 }

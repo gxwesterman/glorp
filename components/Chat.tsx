@@ -15,9 +15,12 @@ export default function Chat() {
       const codeBlocks = scrollRef.current.querySelectorAll('[data-code]');
       if (!codeBlocks?.length) return;
 
+      let hydrated = false;
+
       codeBlocks.forEach((el) => {
         if (el.hasAttribute('data-hydrated')) return;
         if (el.getAttribute('data-status') !== 'done') return;
+        hydrated = true;
         el.setAttribute('data-hydrated', 'true');
         const code = decodeURIComponent(el.getAttribute('data-code') ?? "");
         const language = el.getAttribute('data-lang');
@@ -32,10 +35,12 @@ export default function Chat() {
           </>
         );
       })
-      scrollRef.current.scroll({
-        top: scrollRef.current.scrollHeight,
-        behavior: "instant"
-      });
+      if (hydrated) {
+        scrollRef.current.scroll({
+          top: scrollRef.current.scrollHeight,
+          behavior: "instant"
+        });
+      }
     });
 
     observer.observe(document, {

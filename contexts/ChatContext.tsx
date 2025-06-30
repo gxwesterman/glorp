@@ -6,8 +6,6 @@ import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react"
 import { Chat, Message } from "@/lib/types";
 import { addMessage, deleteChat } from "@/lib/chat-utils";
-import { createRoot } from "react-dom/client";
-import Copy from "@/components/Copy";
 
 const defaultChat = {
   id: "chat",

@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
-import { usePathname } from "next/navigation";
+import React from "react";
 import { useChat } from "@/contexts/ChatContext";
 import { Dot } from "lucide-react";
 import Branch from "@/components/Branch";
@@ -18,8 +17,6 @@ const pending = (
 export default function Messages() {
 
   const { chat, messages } = useChat();
-  const pathname = usePathname();
-  const scrollRef = useRef<HTMLDivElement>(null);
   const streamingAnswer = messages.find(message => message.status === "streaming");
 
   return (

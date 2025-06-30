@@ -145,6 +145,9 @@ code::before, code::after {
   content: none;
 }
 code > pre {
-  padding: 0.5rem;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  font-family: var(--font-geist-mono);
+  padding: 1rem;
   background-color: var(--secondary);
 }

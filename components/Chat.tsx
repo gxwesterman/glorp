@@ -22,7 +22,6 @@ export default function Chat() {
   const pathname = usePathname();
   const scrollRef = useRef<HTMLDivElement>(null);
   const streamingAnswer = messages.find(message => message.status === "streaming");
-  const doneAnswers = messages.filter(message => message.status === "done");
 
   useEffect(() => {
     document.querySelectorAll('[data-code]').forEach((el) => {

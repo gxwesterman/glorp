@@ -1,11 +1,11 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import Chat from "@/components/Chat";
 import ChatForm from "@/components/ChatForm";
 import { ChatProvider } from "@/contexts/ChatContext";
+import Chat from "@/components/Chat";
 
 export default function Layout() {
-  
+
   return (
     <SidebarProvider>
       <ChatProvider>

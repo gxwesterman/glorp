@@ -145,9 +145,11 @@ code::before, code::after {
   content: none;
 }
 code > pre {
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
   font-family: var(--font-geist-mono);
   padding: 1rem;
   background-color: var(--secondary);
+}
+code > div + pre {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
 }

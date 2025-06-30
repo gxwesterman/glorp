@@ -7,7 +7,6 @@ import { useChat } from "@/contexts/ChatContext";
 import { Dot } from "lucide-react";
 import Branch from "@/components/Branch";
 import Copy from "@/components/Copy";
-// import parse, { HTMLReactParserOptions, Element } from "html-react-parser";
 
 const pending = (
   <div className="flex" key="pending">
@@ -16,17 +15,6 @@ const pending = (
     <Dot className="animate-ping delay-300" />
   </div>
 );
-
-// const options: HTMLReactParserOptions = {
-//   replace: (domNode) => {
-//     if (domNode instanceof Element && domNode.attribs && domNode.name === 'code') {
-//       return (
-//         <>chicken</>
-//       )
-//     }
-//   }
-// }
-
 
 export default function Chat() {
 

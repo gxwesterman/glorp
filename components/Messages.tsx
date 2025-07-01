@@ -3,8 +3,7 @@
 import React from "react";
 import { useChat } from "@/contexts/ChatContext";
 import { Dot } from "lucide-react";
-import Branch from "@/components/Branch";
-import Copy from "@/components/Copy";
+import { ChatMessage } from "@/components/ChatMessage";
 
 const pending = (
   <div className="flex" key="pending">
@@ -17,7 +16,6 @@ const pending = (
 export default function Messages() {
 
   const { chat, messages } = useChat();
-  const streamingAnswer = messages.find(message => message.status === "streaming");
 
   return (
     messages.map((message, index) => {
@@ -35,28 +33,8 @@ export default function Messages() {
             message.status === "pending" ?
             (
               pending
-            ) :
-            message.status === "streaming" ?
-            (
-              <div className="flex justify-start">
-                <div className="relative w-full max-w-full break-words">
-                  <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0 dark:prose-invert">
-                    <div dangerouslySetInnerHTML={{ __html: streamingAnswer?.html ?? "" }} />
-                  </div>
-                </div>
-              </div>
             ) : (
-              <div className="flex flex-col gap-4 justify-start group">
-                <div className="relative w-full max-w-full break-words">
-                  <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0 dark:prose-invert">
-                    <div dangerouslySetInnerHTML={{ __html: message.html }} />
-                  </div>
-                </div>
-                <div className="space-x-1 flex">
-                  <Branch className="opacity-0 group-hover:opacity-100" chat={chat} index={index} />
-                  <Copy className="opacity-0 group-hover:opacity-100" content={message.text} />
-                </div>
-              </div>
+              <ChatMessage message={message} chat={chat} index={index} />
             )
           )}
         </div>

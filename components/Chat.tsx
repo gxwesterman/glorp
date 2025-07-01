@@ -12,38 +12,67 @@ export default function Chat() {
   const messagesRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
-  useEffect(() => {
-    const messagesObserver = new MutationObserver(() => {
-      if (!messagesRef.current) return;
-      const codeBlocks = messagesRef.current.querySelectorAll('[data-code]');
-      if (!codeBlocks?.length) return;
+   useEffect(() => {
+    if (!messagesRef.current) return;
 
+    const hydrateCodeBlock = (el: Element) => {
+      if (el.hasAttribute('data-hydrated')) return;
+      if (el.getAttribute('data-status') !== 'done') return;
+
+      el.setAttribute('data-hydrated', 'true');
+      const code = decodeURIComponent(el.getAttribute('data-code') ?? "");
+      const language = el.getAttribute('data-lang');
+      const mountPoint = document.createElement('div');
+      mountPoint.className =
+        "absolute items-center bg-secondary/50 flex justify-between right-0 top-0 w-full rounded-md p-1";
+      el.prepend(mountPoint);
+      const root = createRoot(mountPoint);
+      root.render(
+        <>
+          <span className="font-mono text-muted-foreground ml-2">{language}</span>
+          <Copy content={code} />
+        </>
+      );
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            hydrateCodeBlock(entry.target);
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        root: scrollRef.current,
+        threshold: 0.1,
+      }
+    );
+
+    const io = observer;
+
+    const mutationObserver = new MutationObserver(() => {
+      const codeBlocks = messagesRef.current!.querySelectorAll('[data-code]');
       codeBlocks.forEach((el) => {
-        if (el.hasAttribute('data-hydrated')) return;
-        if (el.getAttribute('data-status') !== 'done') return;
-        el.setAttribute('data-hydrated', 'true');
-        const code = decodeURIComponent(el.getAttribute('data-code') ?? "");
-        const language = el.getAttribute('data-lang');
-        const mountPoint = document.createElement('div');
-        mountPoint.className = "absolute items-center bg-secondary/50 flex justify-between right-0 top-0 w-full rounded-md p-1";
-        el.prepend(mountPoint);
-        const root = createRoot(mountPoint);
-        root.render(
-          <>
-            <span className="font-mono text-muted-foreground ml-2">{language}</span>
-            <Copy content={code} />
-          </>
-        );
-      })
+        if (
+          !el.hasAttribute('data-hydrated') &&
+          el.getAttribute('data-status') === 'done'
+        ) {
+          io.observe(el);
+        }
+      });
     });
 
-    if (!messagesRef.current) return;
-    messagesObserver.observe(messagesRef.current, {
+    mutationObserver.observe(messagesRef.current, {
       childList: true,
       subtree: true,
     });
 
-    return () => messagesObserver.disconnect();
+    return () => {
+      mutationObserver.disconnect();
+      io.disconnect();
+    };
   }, []);
 
   useEffect(() => {

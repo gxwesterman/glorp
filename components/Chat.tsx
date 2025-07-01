@@ -21,17 +21,14 @@ export default function Chat() {
 
       el.setAttribute('data-hydrated', 'true');
       const code = decodeURIComponent(el.getAttribute('data-code') ?? "");
-      const language = el.getAttribute('data-lang');
-      const mountPoint = document.createElement('div');
-      mountPoint.className =
-        "absolute items-center bg-secondary/50 flex justify-between right-0 top-0 w-full rounded-md p-1";
-      el.prepend(mountPoint);
-      const root = createRoot(mountPoint);
+      const language = el.getAttribute('data-lang') ?? "";
+      const header = el.querySelector('.code-header');
+      const copy = el.querySelector('.code-copy');
+      if (!copy || !header) return;
+      header.innerHTML = language;
+      const root = createRoot(copy);
       root.render(
-        <>
-          <span className="font-mono text-muted-foreground ml-2">{language}</span>
-          <Copy content={code} />
-        </>
+        <Copy content={code} />
       );
     };
 

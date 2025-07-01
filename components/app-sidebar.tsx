@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
-import { X } from "lucide-react";
+import { Loader, X } from "lucide-react";
 import { useChat } from "@/contexts/ChatContext";
 
 export function AppSidebar() {
@@ -38,7 +38,7 @@ export function AppSidebar() {
             className="hover:cursor-pointer font-semibold"
             onMouseDown={() => handleClick("")}
           >
-            G6.chat
+            Glorp
           </a>
         </SidebarHeader>
         <SidebarMenu className="px-3">
@@ -57,12 +57,18 @@ export function AppSidebar() {
                   className="hover:cursor-pointer hover:bg-sidebar-accent flex items-center justify-between"
                 >
                   <div className="truncate max-w-[75%] font-semibold text-muted-foreground">{`${chat.title}`}</div>
-                  <button
-                    className="cursor-pointer hover:bg-primary/20 rounded-md p-1.5 absolute right-[-2rem] transition-all group-hover/item:right-1"
-                    onMouseDown={(e) => deleteChat(e, chat)}
-                  >
-                    <X className="h-4 w-4 text-muted-foreground" />
-                  </button>
+                  {chat.messages.find(message => message.status === "streaming" || message.status === "pending") ?
+                    (
+                      <Loader className="animate-spin" />
+                    ) : (
+                      <button
+                        className="cursor-pointer hover:bg-primary/20 rounded-md p-1.5 absolute right-[-2rem] transition-all group-hover/item:right-1"
+                        onMouseDown={(e) => deleteChat(e, chat)}
+                      >
+                        <X className="h-4 w-4 text-muted-foreground" />
+                      </button>
+                    )
+                  }
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>

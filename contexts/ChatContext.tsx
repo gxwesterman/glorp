@@ -5,7 +5,7 @@ import { id } from "@instantdb/react";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react"
 import { Chat, Message } from "@/lib/types";
-import { addMessage, deleteChat } from "@/lib/chat-utils";
+import { addMessage } from "@/lib/chat-utils";
 
 const defaultChat = {
   id: "chat",
@@ -43,7 +43,6 @@ type ChatProviderState = {
   chats: Chat[],
   chat: Chat,
   messages: Message[],
-  deleteChat: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, chat: Chat) => void,
   startStream: (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => Promise<void>
 }
 
@@ -51,7 +50,6 @@ const initialState: ChatProviderState = {
   chats: [],
   chat: defaultChat,
   messages: [],
-  deleteChat: () => undefined,
   startStream: async () => undefined,
 }
 
@@ -102,7 +100,7 @@ export function ChatProvider({
   if (!data || (pageChatId !== 'chat' && chat.id === "chat")) return;
 
   return (
-    <ChatProviderContext.Provider {...props} value={{ startStream, deleteChat, chat, chats, messages }}>
+    <ChatProviderContext.Provider {...props} value={{ startStream, chat, chats, messages }}>
       {children}
     </ChatProviderContext.Provider>
   )

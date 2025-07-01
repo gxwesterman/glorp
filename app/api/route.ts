@@ -15,6 +15,8 @@ function createRenderer(status: string) {
             data-lang="${language}"
             data-code="${encodeURIComponent(text)}"
           >
+            <div class="code-header"></div>
+            <div class="code-copy"></div>
             <pre>${highlight(text)}</pre>
           </code>`;
       }

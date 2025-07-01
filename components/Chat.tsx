@@ -4,28 +4,28 @@ import Messages from "@/components/Messages";
 import { useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import Copy from "@/components/Copy";
+import { usePathname } from "next/navigation";
 
 export default function Chat() {
   
   const scrollRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
-    const observer = new MutationObserver(() => {
-      if (!scrollRef.current) return;
-      const codeBlocks = scrollRef.current.querySelectorAll('[data-code]');
+    const messagesObserver = new MutationObserver(() => {
+      if (!messagesRef.current) return;
+      const codeBlocks = messagesRef.current.querySelectorAll('[data-code]');
       if (!codeBlocks?.length) return;
-
-      let hydrated = false;
 
       codeBlocks.forEach((el) => {
         if (el.hasAttribute('data-hydrated')) return;
         if (el.getAttribute('data-status') !== 'done') return;
-        hydrated = true;
         el.setAttribute('data-hydrated', 'true');
         const code = decodeURIComponent(el.getAttribute('data-code') ?? "");
         const language = el.getAttribute('data-lang');
         const mountPoint = document.createElement('div');
-        mountPoint.className = "items-center bg-secondary/50 flex justify-between rounded-t-md p-1";
+        mountPoint.className = "absolute items-center bg-secondary/50 flex justify-between right-0 top-0 w-full rounded-md p-1";
         el.prepend(mountPoint);
         const root = createRoot(mountPoint);
         root.render(
@@ -35,29 +35,34 @@ export default function Chat() {
           </>
         );
       })
-      if (hydrated) {
-        scrollRef.current.scroll({
-          top: scrollRef.current.scrollHeight,
-          behavior: "instant"
-        });
-      }
     });
 
-    observer.observe(document, {
+    if (!messagesRef.current) return;
+    messagesObserver.observe(messagesRef.current, {
       childList: true,
       subtree: true,
     });
 
-    return () => observer.disconnect();
+    return () => messagesObserver.disconnect();
   }, []);
-    
+
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scroll({
+      top: scrollRef.current.scrollHeight,
+      behavior: "instant"
+    });
+  }, [pathname]);
+
   return (
     <div className="absolute bottom-0 top-0 w-full">
       <div
         ref={scrollRef}
         className="absolute inset-0 overflow-y-scroll pt-3.5 pb-[144px]"
       >
-        <Messages />
+        <div ref={messagesRef} className="mx-auto flex w-full max-w-3xl flex-col space-y-12 p-4 pb-8">
+          <Messages />
+        </div>
       </div>
     </div>
   );

@@ -145,11 +145,14 @@ code::before, code::after {
   content: none;
 }
 code > pre {
+  width: 100%;
   font-family: var(--font-geist-mono);
   padding: 1rem;
   background-color: var(--secondary);
 }
-code > div + pre {
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
+code[data-code] {
+  width: 100%;
+  display: flex;
+  padding-top: 3rem;
+  position: relative;
 }

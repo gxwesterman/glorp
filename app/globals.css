@@ -141,19 +141,24 @@
   }
 }
 
+code:not(:has(>pre)) {
+  @apply bg-secondary p-1 rounded text-muted-foreground font-mono;
+}
 code::before, code::after {
-  content: none;
+  @apply content-none;
 }
 code > pre {
-  width: 100%;
-  font-family: var(--font-geist-mono);
-  padding: 1rem;
-  background-color: var(--secondary);
+  @apply w-full font-mono p-4 bg-secondary;
 }
 code[data-code] {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding-top: 3rem;
-  position: relative;
+  @apply flex flex-col w-full relative only:pb-6;
+}
+code[data-code] > pre {
+  @apply rounded-t-none;
+}
+.code-copy {
+  @apply h-10 sticky top-0 flex items-center justify-end text-muted-foreground;
+}
+.code-header {
+  @apply absolute flex items-center text-muted-foreground px-2 h-10 w-full bg-secondary/50 rounded-t-md;
 }

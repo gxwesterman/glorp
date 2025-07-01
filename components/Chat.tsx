@@ -61,6 +61,16 @@ export default function Chat() {
       });
     });
 
+    const initialCodeBlocks = messagesRef.current.querySelectorAll('[data-code]');
+    initialCodeBlocks.forEach((el) => {
+      if (
+        !el.hasAttribute('data-hydrated') &&
+        el.getAttribute('data-status') === 'done'
+      ) {
+        io.observe(el);
+      }
+    });
+
     mutationObserver.observe(messagesRef.current, {
       childList: true,
       subtree: true,

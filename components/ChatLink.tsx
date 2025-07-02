@@ -9,6 +9,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
   const [toggle, setToggle] = useState("");
   const [value, setValue] = useState(chat.title);
   const wrapperRef = useRef<HTMLButtonElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const isEditing = toggle === chat.id;
 
@@ -28,13 +29,15 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
 
   useEffect(() => {
     if (isEditing) {
+      inputRef?.current?.select();
       document.addEventListener("mousedown", handleClickOutside);
       return () => document.removeEventListener("mousedown", handleClickOutside);
     }
-  }, [isEditing, value, chat.id]);
+  }, [isEditing]);
 
   const handleDoubleClick = () => {
     setToggle(chat.id);
+    inputRef.current?.select();
   };
 
   return (
@@ -47,6 +50,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
       >
           {isEditing ? (
             <Input
+              ref={inputRef}
               className="border-none text-muted-foreground font-semibold ring-0 dark:text-muted-foreground dark:font-semibold dark:ring-0"
               value={value}
               onChange={(e) => setValue(e.target.value)}
@@ -57,7 +61,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
               onDoubleClick={handleDoubleClick}
               onMouseDown={() => window.history.pushState({}, "", `/chat/${chat.urlId}`)}
               key={chat.id}
-              className="hover:cursor-pointer hover:bg-sidebar-accent flex items-center justify-between"
+              className="hover:cursor-pointer hover:bg-sidebar-accent flex items-center justify-between select-none"
             >
               <div className="truncate max-w-[75%] font-semibold text-muted-foreground">
                 {chat.title}

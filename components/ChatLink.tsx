@@ -1,37 +1,70 @@
 import { Loader, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Chat } from "@/lib/types";
-import { useState } from "react";
-import { deleteChat } from "@/lib/chat-utils";
+import { useEffect, useRef, useState } from "react";
+import { deleteChat, editChat } from "@/lib/chat-utils";
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
 export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlId: string }) {
+  const [toggle, setToggle] = useState("");
+  const [value, setValue] = useState(chat.title);
+  const wrapperRef = useRef<HTMLButtonElement>(null);
 
-  const [toggle, setToggle] = useState<string[]>([]);
+  const isEditing = toggle === chat.id;
 
-  const handleDoubleClick = (chat: Chat) => {
-    setToggle([...toggle, chat.id]);
+  const handleClickOutside = (e: MouseEvent) => {
+    if (isEditing && wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+      editChat(chat.id, value);
+      setToggle('');
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      editChat(chat.id, value);
+      setToggle('');
+    }
   }
+
+  useEffect(() => {
+    if (isEditing) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [isEditing, value, chat.id]);
+
+  const handleDoubleClick = () => {
+    setToggle(chat.id);
+  };
 
   return (
     <SidebarMenuItem>
       <SidebarMenuButton
+        ref={wrapperRef}
         isActive={activeUrlId === chat.urlId}
         asChild
         className="py-[1.125rem] group/item relative"
       >
-        {toggle.includes(chat.id) ? (
-          <Input></Input>
-        ) : (
-          <a
-            onDoubleClick={() => handleDoubleClick(chat)}
-            onMouseDown={() => window.history.pushState({}, "", `/chat/${chat.urlId}`)}
-            key={chat.id}
-            className="hover:cursor-pointer hover:bg-sidebar-accent flex items-center justify-between"
-          >
-            <div className="truncate max-w-[75%] font-semibold text-muted-foreground">{`${chat.title}`}</div>
-            {chat.messages.find(message => message.status === "streaming" || message.status === "pending") ?
-              (
+          {isEditing ? (
+            <Input
+              className="border-none text-muted-foreground font-semibold ring-0 dark:text-muted-foreground dark:font-semibold dark:ring-0"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e)}
+            />
+          ) : (
+            <a
+              onDoubleClick={handleDoubleClick}
+              onMouseDown={() => window.history.pushState({}, "", `/chat/${chat.urlId}`)}
+              key={chat.id}
+              className="hover:cursor-pointer hover:bg-sidebar-accent flex items-center justify-between"
+            >
+              <div className="truncate max-w-[75%] font-semibold text-muted-foreground">
+                {chat.title}
+              </div>
+              {chat.messages.find(message =>
+                message.status === "streaming" || message.status === "pending"
+              ) ? (
                 <Loader className="animate-spin" />
               ) : (
                 <button
@@ -40,11 +73,10 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
                 >
                   <X className="h-4 w-4 text-muted-foreground" />
                 </button>
-              )
-            }
-          </a>
-        )}
+              )}
+            </a>
+          )}
       </SidebarMenuButton>
     </SidebarMenuItem>
-  )
+  );
 }

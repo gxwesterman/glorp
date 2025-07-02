@@ -37,3 +37,12 @@ export function deleteChat(
   db.transact(db.tx.chats[chat.id].delete());
   db.transact(chat.messages.map((m) => db.tx.messages[m.id].delete()));
 };
+
+export function editChat(id: string, title: string) {
+  db.transact(
+    db.tx.chats[id].update({
+        title: title
+      }
+    )
+  )
+};

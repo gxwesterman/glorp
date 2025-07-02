@@ -67,7 +67,7 @@ export default function ChatForm() {
               />
               <Button
                 type="submit"
-                className="transition-colors font-semibold shadow h-9 w-9"
+                className="bg-teal-600 hover:bg-teal-500 border border-teal-500 text-foreground transition-colors font-semibold shadow h-9 w-9"
               >
                 <ArrowUp className="!size-5" />
               </Button>

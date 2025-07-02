@@ -34,7 +34,7 @@ export function AppSidebar() {
           </a>
         </SidebarHeader>
         <SidebarMenu className="px-3">
-          <Button onClick={() =>window.history.pushState({}, "", "/chat")}>New Chat</Button>
+          <Button className="bg-teal-700 border border-teal-600 text-foreground hover:bg-teal-600" onClick={() =>window.history.pushState({}, "", "/chat")}>New Chat</Button>
           <div className="border-b border-border my-4"></div>
           {chats.map((chat) => (
             <ChatLink key={chat.id} chat={chat} activeUrlId={activeUrlId} />

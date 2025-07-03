@@ -1,18 +1,27 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import Branch from "@/components/Branch";
 import Copy from "@/components/Copy";
 import { Message, Chat } from "@/lib/types";
+
+const Chunk = memo(({ html }: { html: string }) => (
+  <div dangerouslySetInnerHTML={{ __html: html }} />
+), (prev, next) => prev.html === next.html);
 
 export const ChatMessage = memo(function ChatMessage({ message, chat, index }: {
   message: Message,
   chat: Chat,
   index: number
 }) {
+
+  const chunks = useMemo(() => message.html.split('<!-- __BLOCK__ -->'), [message.html]);
   return (
     <div className="flex flex-col justify-start group">
       <div className="relative w-full max-w-full break-words">
         <div className="space-y-4 prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0 dark:prose-invert">
-          <div dangerouslySetInnerHTML={{ __html: message.html }} />
+          {/* <div dangerouslySetInnerHTML={{ __html: message.html }} /> */}
+          {chunks.map((chunk, index) => (
+            <Chunk key={index} html={chunk} />
+          ))}
         </div>
       </div>
       <div className="space-x-1 flex">

@@ -1,37 +1,44 @@
 import { GoogleGenAI } from "@google/genai";
 import { admin_db as db } from "@/lib/instant";
-import { marked, Tokens } from "marked";
+import { marked, Renderer, Tokens } from "marked";
 import { highlight } from "sugar-high";
 
+const CHUNK_SEPARATOR = "<!-- __BLOCK__ -->";
+
 function createRenderer(status: string) {
-  return {
-    code(tokens: Tokens.Code) {
-      const text = tokens.text;
-      const language = tokens.lang?.trim();
-      if (language) {
-        return `
-          <code
-            data-status="${status}"
-            data-lang="${language}"
-            data-code="${encodeURIComponent(text)}"
-          >
-            <div class="code-header"></div>
-            <div class="code-copy"></div>
-            <pre>${highlight(text)}</pre>
-          </code>`;
-      }
+  const base = new Renderer();
+  
+  base.code = (tokens: Tokens.Code) => {
+    const text = tokens.text;
+    const language = tokens.lang?.trim();
+    if (language) {
       return `
-        <code>
-          <pre>${text}</pre>
+        <code
+          data-status="${status}"
+          data-lang="${language}"
+          data-code="${encodeURIComponent(text)}"
+        >
+          <div class="code-header"></div>
+          <div class="code-copy"></div>
+          <pre>${highlight(text)}</pre>
         </code>`;
     }
-  };
+    return `
+      <code>
+        <pre>${text}</pre>
+      </code>`;
+  }
+  return base;
+}
+
+function parse(markdown: string, status: string) {
+  const tokens = marked.lexer(markdown);
+  const renderer = createRenderer(status);
+  return tokens.map(token => marked.parser([token], { renderer })).join(CHUNK_SEPARATOR) + CHUNK_SEPARATOR;
 }
 
 async function updateMessage(id: string, text: string, status: string) {
-  const renderer = createRenderer(status);
-  marked.use({ renderer });
-  const html = marked.parse(text);
+  const html = parse(text, status);
   await db.transact(
     db.tx.messages[id].update({
       text,

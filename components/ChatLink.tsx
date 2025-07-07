@@ -7,32 +7,27 @@ import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
 export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlId: string }) {
   const [toggle, setToggle] = useState("");
-  const [value, setValue] = useState(chat.title);
   const wrapperRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isEditing = toggle === chat.id;
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (isEditing && wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-      editChat(chat.id, value);
-      setToggle('');
-    }
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      editChat(chat.id, value);
       setToggle('');
     }
   }
 
   useEffect(() => {
-    if (isEditing) {
-      inputRef?.current?.select();
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }
+    if (!isEditing) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (isEditing && wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setToggle('');
+      }
+    };
+    inputRef?.current?.select();
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isEditing]);
 
   const handleDoubleClick = () => {
@@ -52,8 +47,8 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
             <Input
               ref={inputRef}
               className="border-none text-muted-foreground font-semibold ring-0 dark:text-muted-foreground dark:font-semibold dark:ring-0"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
+              value={chat.title}
+              onChange={(e) => editChat(chat.id, e.target.value)}
               onKeyDown={(e) => handleKeyDown(e)}
             />
           ) : (

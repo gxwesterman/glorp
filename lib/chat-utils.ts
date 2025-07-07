@@ -41,7 +41,7 @@ export function deleteChat(
 export function editChat(id: string, title: string) {
   db.transact(
     db.tx.chats[id].update({
-        title: title
+        title
       }
     )
   )

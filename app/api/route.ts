@@ -88,7 +88,7 @@ export async function POST(req: Request) {
   });
 
   await updateMessage(answerId, response, "done");
-  await editChat(chatId, title.text ?? "");
+  if (messages.length === 0) await editChat(chatId, title.text ?? "");
 
   return Response.json({ message: 'Done' })
 }

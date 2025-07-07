@@ -5,12 +5,9 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
 import { useChat } from "@/contexts/ChatContext";
 import ChatLink from "@/components/ChatLink";
 
@@ -18,9 +15,7 @@ export function AppSidebar() {
 
   const { chats } = useChat();
   const pathname = usePathname();
-  const activeUrlId = useMemo(() => {
-    return (pathname.split("/").pop() || "");
-  }, [pathname]);
+  const activeUrlId = pathname.split("/").pop() || "";
 
   return (
     <Sidebar className="border-none">

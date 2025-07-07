@@ -26,6 +26,7 @@ const startStream = async (chatId: string, input: string, messages: { [x: string
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        chatId: chatId,
         answerId: newAnswerId,
         message: input,
         messages: messages,

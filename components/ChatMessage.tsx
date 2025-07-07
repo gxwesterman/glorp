@@ -13,7 +13,7 @@ export const ChatMessage = memo(function ChatMessage({ message, chat, index }: {
   index: number
 }) {
 
-  const chunks = useMemo(() => message.html.split('<!-- __BLOCK__ -->'), [message.html]);
+  const chunks = message.html.split('<!-- __BLOCK__ -->');
   return (
     <div className="flex flex-col justify-start group">
       <div className="relative w-full max-w-full break-words">

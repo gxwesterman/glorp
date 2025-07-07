@@ -46,7 +46,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
           {isEditing ? (
             <Input
               ref={inputRef}
-              className="border-none text-muted-foreground font-semibold ring-0 dark:text-muted-foreground dark:font-semibold dark:ring-0"
+              className="selection:bg-teal-900 selection:text-foreground border-none text-muted-foreground font-semibold ring-0 dark:text-muted-foreground dark:font-semibold dark:ring-0"
               value={chat.title}
               onChange={(e) => editChat(chat.id, e.target.value)}
               onKeyDown={(e) => handleKeyDown(e)}

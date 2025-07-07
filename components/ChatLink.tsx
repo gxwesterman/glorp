@@ -61,7 +61,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
               onDoubleClick={handleDoubleClick}
               onMouseDown={() => window.history.pushState({}, "", `/chat/${chat.urlId}`)}
               key={chat.id}
-              className="hover:cursor-pointer hover:bg-sidebar-accent flex items-center justify-between select-none"
+              className="hover:bg-sidebar-accent flex items-center justify-between select-none"
             >
               <div className="truncate max-w-[75%] font-semibold text-muted-foreground">
                 {chat.title}

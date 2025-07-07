@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { ai } from "@/lib/ai";
 import { admin_db as db } from "@/lib/instant";
 import { marked, Renderer, Tokens } from "marked";
 import { highlight } from "sugar-high";
@@ -48,10 +48,18 @@ async function updateMessage(id: string, text: string, status: string) {
   );
 }
 
-export async function POST(req: Request) {
-  const { answerId, message, messages } = await req.json();
+async function editChat(id: string, title: string) {
+  await db.transact(
+    db.tx.chats[id].update({
+        title,
+      }
+    )
+  );
+}
 
-  const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || ''} );
+export async function POST(req: Request) {
+  const { answerId, chatId, message, messages } = await req.json();
+
   const chat = ai.chats.create({
     model: "gemini-2.0-flash",
     history: messages.map((message: { type: string, text: string }) => {
@@ -70,6 +78,17 @@ export async function POST(req: Request) {
       await updateMessage(answerId, response, "streaming");
     }
   }
+
+  const title = await ai.models.generateContent({
+    model: "gemini-2.0-flash",
+    contents: response,
+    config: {
+      systemInstruction: "Give me a title no more than 3 words that summarizes this content. Do not add any punctuation.",
+    },
+  });
+
   await updateMessage(answerId, response, "done");
+  await editChat(chatId, title.text ?? "");
+
   return Response.json({ message: 'Done' })
 }

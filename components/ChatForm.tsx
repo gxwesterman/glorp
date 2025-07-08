@@ -7,13 +7,14 @@ import { usePathname } from 'next/navigation';
 import { ArrowUp } from 'lucide-react';
 import { useChat } from "@/contexts/ChatContext";
 import { startChat } from "@/lib/chat-utils";
+import { cn } from "@/lib/utils";
 
 export default function ChatForm() {
   const pathname = usePathname();
   let pageChatId = (pathname.split('/').pop() || '');
   const [input, setInput] = useState('');
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { messages, startStream } = useChat();
+  const { user, messages, startStream } = useChat();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (
@@ -33,7 +34,7 @@ export default function ChatForm() {
       textAreaRef.current.style.height = 'auto';
     }
     if (pageChatId === 'chat') {
-        pageChatId = startChat(input);
+        pageChatId = startChat(input, user.id);
         window.history.pushState({}, '', window.location.href + `/${pageChatId}`);
     }
     setInput('');
@@ -67,7 +68,8 @@ export default function ChatForm() {
               />
               <Button
                 type="submit"
-                className="bg-teal-600 hover:bg-teal-500 border border-teal-500 text-foreground transition-colors font-semibold shadow h-9 w-9"
+                variant="secondary"
+                className={cn(!input ? "opacity-50 hover:cursor-not-allowed" : "hover:to-teal-700", "bg-radial-[at_0%_25%] from-teal-700 to-teal-900 text-foreground transition-colors font-semibold shadow h-9 w-9")}
               >
                 <ArrowUp className="!size-5" />
               </Button>

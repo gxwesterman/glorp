@@ -7,12 +7,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { startChat, addMessage } from "@/lib/chat-utils";
+import { useChat } from "@/contexts/ChatContext";
 
-export default function Branch({ chat, index, className }: { chat: Chat, index: number, className?: string }) {
+export default function Branch({ index, className }: { index: number, className?: string }) {
 
+  const { user, chat } = useChat();
   function handleClick() {
     const messages = chat.messages;
-    const id = startChat("Branch from " + chat.title);
+    const id = startChat("Branch from " + chat.title, user.id);
     for (let i = 0; i <= index; i++) {
       const message = messages[i];
       addMessage(message.text, message.html, message.type, id);

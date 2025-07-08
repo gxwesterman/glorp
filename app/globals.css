@@ -121,15 +121,15 @@
   --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.553 0.013 58.071);
-  --sh-class: #2d5e9d;
+  --sh-class: oklch(0.71 0.13 215);
   --sh-identifier: var(--foreground);
-  --sh-sign: #8996a3;
+  --sh-sign: oklch(0.97 0.07 103);
   --sh-property: #0550ae;
   --sh-entity: #249a97;
   --sh-jsxliterals: #6266d1;
-  --sh-string: #00a99a;
-  --sh-keyword: #f47067;
-  --sh-comment: #a19595;
+  --sh-string: oklch(0.70 0.12 183);
+  --sh-keyword: oklch(0.71 0.17 22);
+  --sh-comment: oklch(0.72 0.01 56);
 }
 
 @layer base {
@@ -137,7 +137,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
   ::selection {
     @apply bg-teal-900 text-foreground;

@@ -1,11 +1,13 @@
 import { db } from "@/lib/instant";
 import { id } from "@instantdb/react";
 import { Chat } from "@/lib/types";
+import { useChat } from "@/contexts/ChatContext";
 
-export function startChat(title: string) {
+export function startChat(title: string, userId: string) {
   const chatId = id();
   db.transact(
     db.tx.chats[chatId].update({
+      userId,
       urlId: chatId,
       title
     }),

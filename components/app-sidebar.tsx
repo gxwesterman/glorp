@@ -33,7 +33,7 @@ export function AppSidebar() {
           >
             Glorp
             <Image
-              src="/icon.svg"
+              src="/glorp.svg"
               width={30}
               height={30}
               alt="Logo"

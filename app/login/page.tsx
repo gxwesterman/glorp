@@ -77,7 +77,7 @@ function EmailStep({ onSendEmail }: { onSendEmail: (email: string) => void }) {
       <h2 className="text-2xl font-bold flex items-center gap-2">
         Glorp
         <Image
-          src="/icon.svg"
+          src="/glorp.svg"
           width={50}
           height={0}
           alt="Logo"

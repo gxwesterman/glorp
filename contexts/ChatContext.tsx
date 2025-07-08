@@ -41,6 +41,7 @@ const startStream = async (chatId: string, input: string, messages: { [x: string
 }
 
 type ChatProviderState = {
+  user: { id: string, email: string }
   chats: Chat[],
   chat: Chat,
   messages: Message[],
@@ -48,6 +49,7 @@ type ChatProviderState = {
 }
 
 const initialState: ChatProviderState = {
+  user: { id: '', email: '' },
   chats: [],
   chat: defaultChat,
   messages: [],
@@ -61,22 +63,15 @@ export function ChatProvider({
   ...props
 }: { children: React.ReactNode }) {
 
-  const [sessionId, setSessionId] = useState('');
+  const { user, isLoading, error } = db.useAuth();
   const pathname = usePathname();
   const pageChatId = pathname.split("/").pop() || "";
-
-  useEffect(() => {
-    const cookies = document.cookie.split(';');
-    const userIdCookie = cookies.find(cookie => cookie.trim().startsWith('g6_session='));
-    const extractedUserId = userIdCookie ? userIdCookie.split('=')[1].trim() : '';
-    setSessionId(extractedUserId);
-  }, [pathname])
 
   const chatsQuery = {
     chats: {
       $: {
         where: {
-          sessionId: sessionId
+          userId: user?.id ?? "",
         }
       },
       messages: {},
@@ -98,10 +93,11 @@ export function ChatProvider({
     }
   }, [chat, pageChatId, wasChatPresent]);
 
+  if (isLoading || error || !user) return;
   if (!data || (pageChatId !== 'chat' && chat.id === "chat")) return;
 
   return (
-    <ChatProviderContext.Provider {...props} value={{ startStream, chat, chats, messages }}>
+    <ChatProviderContext.Provider {...props} value={{ user, startStream, chat, chats, messages }}>
       {children}
     </ChatProviderContext.Provider>
   )

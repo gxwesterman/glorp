@@ -1,10 +1,28 @@
+"use client"
+
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import ChatForm from "@/components/ChatForm";
 import { ChatProvider } from "@/contexts/ChatContext";
 import Chat from "@/components/Chat";
+import { db } from "@/lib/instant";
+import { redirect } from "next/navigation";
 
 export default function Layout() {
+
+  const { user, isLoading, error } = db.useAuth();
+
+  if (isLoading) {
+    return;
+  }
+
+  if (error) {
+    return <div className="p-4 text-red-500">Uh oh! {error.message}</div>;
+  }
+
+  if (!user) {
+    redirect("/login");
+  }
 
   return (
     <SidebarProvider>

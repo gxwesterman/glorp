@@ -23,9 +23,10 @@ export const ChatMessage = memo(function ChatMessage({ message, chat, index }: {
           ))}
         </div>
       </div>
-      <div className="space-x-1 flex">
-        <Branch className="opacity-0 group-hover:opacity-100" chat={chat} index={index} />
-        <Copy className="opacity-0 group-hover:opacity-100" content={message.text} />
+      <div className="space-x-1 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+        <Branch index={index} />
+        <Copy content={message.text} />
+        <span className="text-xs font-medium text-teal-100">Gemini 2.5 Flash</span>
       </div>
     </div>
   );

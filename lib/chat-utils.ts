@@ -3,14 +3,10 @@ import { id } from "@instantdb/react";
 import { Chat } from "@/lib/types";
 
 export function startChat(title: string) {
-  const cookies = document.cookie.split(';');
-  const userIdCookie = cookies.find(cookie => cookie.trim().startsWith('g6_session='));
-  const extractedUserId = userIdCookie ? userIdCookie.split('=')[1].trim() : '';
   const chatId = id();
   db.transact(
     db.tx.chats[chatId].update({
       urlId: chatId,
-      sessionId: extractedUserId,
       title
     }),
   );

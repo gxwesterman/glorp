@@ -20,10 +20,10 @@ export default function Messages() {
   return (
     messages.map((message, index) => {
       return (
-        <div key={message.id}>
+        <div key={message.id} className={`${index === messages.length - 1 && "min-h-160"}`}>
           {message.type === "question" ? (
             <div className="flex justify-end">
-              <div className="relative inline-block max-w-[80%] break-words rounded-2xl border border-secondary/50 bg-secondary/50 p-4 text-left">
+              <div className="relative inline-block max-w-[80%] break-words rounded-2xl bg-secondary/50 p-4 text-left">
                 <div className="whitespace-pre overflow-x-auto prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-teal prose-pre:p-0 dark:prose-invert">
                   {message.text}
                 </div>

@@ -10,8 +10,9 @@ import { addMessage } from "@/lib/chat-utils";
 const defaultChat = {
   id: "chat",
   urlId: "chat",
-  title: "Chat",
+  title: "Glorp",
   messages: [],
+  edited: false,
 }
 
 const startStream = async (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => {

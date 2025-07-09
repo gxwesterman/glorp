@@ -12,4 +12,5 @@ export type Chat = {
   urlId: string;
   title: string;
   messages: Message[];
+  edited: boolean;
 };

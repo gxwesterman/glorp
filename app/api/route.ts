@@ -18,7 +18,7 @@ function createRenderer(status: string) {
           data-lang="${language}"
           data-code="${encodeURIComponent(text)}"
         >
-          <div class="code-header"></div>
+          <div class="code-header">${language}</div>
           <div class="code-copy"></div>
           <pre>${highlight(text)}</pre>
         </code>`;
@@ -59,36 +59,44 @@ async function editChat(id: string, title: string) {
 
 export async function POST(req: Request) {
   const { answerId, chatId, message, messages } = await req.json();
+  const history = messages.map((message: { type: string, text: string }) => {
+    return {
+      role: message.type === 'question' ? 'user' : 'model',
+      parts: [{ text: message.text }]
+    }});
 
   const chat = ai.chats.create({
     model: "gemini-2.0-flash",
-    history: messages.map((message: { type: string, text: string }) => {
-      return {
-        role: message.type === 'question' ? 'user' : 'model',
-        parts: [{ text: message.text }]
-      }
-    })
-  })
+    history: history,
+  });
     
   const stream = await chat.sendMessageStream({ message: message });
   let response = '';
+  let buffer = '';
+  const BUFFER_LIMIT = 30;
+
   for await (const chunk of stream) {
     if (chunk.text) {
-      response += chunk.text;
-      await updateMessage(answerId, response, "streaming");
+      for (const char of chunk.text) {
+        response += char;
+        buffer += char;
+
+        if (buffer.length >= BUFFER_LIMIT) {
+          await updateMessage(answerId, response, "streaming");
+          buffer = '';
+        }
+      }
     }
   }
 
-  const title = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
-    contents: response,
-    config: {
-      systemInstruction: "Give me a title no more than 3 words that summarizes this content. Do not add any punctuation.",
-    },
-  });
+  if (buffer.length > 0) {
+    await updateMessage(answerId, response, "streaming");
+  }
+
+  const title = await chat.sendMessage({ message: "Give me a title no more than 3 words that summarizes this content. Do not add any punctuation." });
 
   await updateMessage(answerId, response, "done");
-  if (messages.length === 0) await editChat(chatId, title.text ?? "");
+  await editChat(chatId, title.text ?? "");
 
   return Response.json({ message: 'Done' })
 }

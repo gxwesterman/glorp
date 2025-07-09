@@ -126,7 +126,7 @@ function CodeStep({ sentEmail }: { sentEmail: string }) {
       className="flex flex-col space-y-4 items-center"
     >
       <h2 className="text-xl font-bold">Enter your code</h2>
-      <p className="text-teal-100">
+      <p className="text-muted-foreground">
         We sent an email to <strong>{sentEmail}</strong>. Check your email, and
         paste the code you see.
       </p>

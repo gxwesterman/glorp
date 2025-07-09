@@ -50,9 +50,9 @@ export default function ChatForm() {
   }
 
   return (
-    <div className="absolute bottom-0 w-full">
+    <div className="absolute bottom-0 w-full px-4">
       <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col text-center">
-        <div className="border border-border relative rounded-t-lg p-2 pb-0 backdrop-blur-lg">
+        <div className="relative rounded-lg p-2 pb-0 backdrop-blur-lg bg-secondary/70 shadow shadow-background">
           <form
             onSubmit={handleSubmit}
           >
@@ -60,7 +60,7 @@ export default function ChatForm() {
               <Textarea
                 ref={textAreaRef}
                 name="message"
-                className="dark:bg-transparent font-semibold grow resize-none border-none outline-none text-base shadow-none focus-visible:ring-0 max-h-80"
+                className="min-h-25 dark:bg-transparent font-medium grow resize-none border-none outline-none text-base shadow-none focus-visible:ring-0 max-h-80"
                 placeholder="Type your message here..."
                 onKeyDown={handleKeyDown}
                 value={input}
@@ -76,6 +76,7 @@ export default function ChatForm() {
             </div>
           </form>
         </div>
+        <div className="bg-background bg-[url(../public/noise.png)] bg-repeat mx-auto w-full h-5" />
       </div>
     </div>
   );

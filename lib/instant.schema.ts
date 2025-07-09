@@ -10,6 +10,7 @@ const schema = i.schema({
       userId: i.string(),
       urlId: i.string(),
       title: i.string(),
+      edited: i.boolean(),
     }),
     messages: i.entity({
       chatId: i.string(),

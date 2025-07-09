@@ -46,7 +46,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
           {isEditing ? (
             <Input
               ref={inputRef}
-              className="selection:bg-teal-900 selection:text-foreground border-none text-muted-foreground font-semibold ring-0 dark:text-muted-foreground dark:font-semibold dark:ring-0"
+              className="selection:bg-teal-900 selection:text-foreground border-none text-muted-foreground ring-0 dark:text-muted-foreground dark:ring-0"
               value={chat.title}
               onChange={(e) => editChat(chat.id, e.target.value)}
               onKeyDown={(e) => handleKeyDown(e)}
@@ -58,7 +58,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
               key={chat.id}
               className="hover:bg-sidebar-accent flex items-center justify-between select-none"
             >
-              <div className="truncate max-w-[75%] font-semibold text-muted-foreground">
+              <div className="truncate max-w-[75%] font-medium text-muted-foreground">
                 {chat.title}
               </div>
               {chat.messages.find(message =>
@@ -67,7 +67,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
                 <Loader className="animate-spin" />
               ) : (
                 <button
-                  className="cursor-pointer hover:bg-primary/20 rounded-md p-1.5 absolute right-[-2rem] transition-all group-hover/item:right-1"
+                  className="cursor-pointer hover:bg-primary/20 rounded-md p-1.5 right-1 absolute translate-x-full transition-transform group-hover/item:translate-x-0"
                   onMouseDown={(e) => deleteChat(e, chat)}
                 >
                   <X className="h-4 w-4 text-muted-foreground" />

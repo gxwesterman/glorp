@@ -1,7 +1,6 @@
 import { db } from "@/lib/instant";
 import { id } from "@instantdb/react";
 import { Chat } from "@/lib/types";
-import { useChat } from "@/contexts/ChatContext";
 
 export function startChat(title: string, userId: string) {
   const chatId = id();
@@ -39,7 +38,8 @@ export function deleteChat(
 export function editChat(id: string, title: string) {
   db.transact(
     db.tx.chats[id].update({
-        title
+        title,
+        edited: true,
       }
     )
   )

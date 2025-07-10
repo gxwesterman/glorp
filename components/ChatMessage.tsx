@@ -1,15 +1,15 @@
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import Branch from "@/components/Branch";
 import Copy from "@/components/Copy";
-import { Message, Chat } from "@/lib/types";
+import { Message } from "@/lib/types";
 
 const Chunk = memo(({ html }: { html: string }) => (
   <div dangerouslySetInnerHTML={{ __html: html }} />
 ), (prev, next) => prev.html === next.html);
+Chunk.displayName = "Chunk";
 
-export const ChatMessage = memo(function ChatMessage({ message, chat, index }: {
+export const ChatMessage = memo(function ChatMessage({ message, index }: {
   message: Message,
-  chat: Chat,
   index: number
 }) {
 
@@ -38,3 +38,4 @@ export const ChatMessage = memo(function ChatMessage({ message, chat, index }: {
     prevProps.message.text === nextProps.message.text
   );
 });
+ChatMessage.displayName = "ChatMessage";

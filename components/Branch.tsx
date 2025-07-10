@@ -1,4 +1,3 @@
-import { Chat } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Split } from "lucide-react";
 import {

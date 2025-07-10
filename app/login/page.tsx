@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { User } from "@instantdb/react";
 import { db } from "@/lib/instant";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,20 +23,6 @@ function App() {
   }
 
   return <Login />;
-}
-
-function Main({ user }: { user: User }) {
-  return (
-    <div className="p-4 space-y-4">
-      <h1 className="text-2xl font-bold">Hello {user.email}!</h1>
-      <button
-        onClick={() => db.auth.signOut()}
-        className="px-3 py-1 bg-blue-600 text-white font-bold hover:bg-blue-700"
-      >
-        Sign out
-      </button>
-    </div>
-  );
 }
 
 function Login() {

@@ -102,7 +102,7 @@ export default function Chat() {
 
     prevPathname.current = pathname;
     prevMessageCount.current = chat.messages.length;
-  }, [pathname, chat.messages.length]);
+  }, [pathname, chat.messages.length, chat.title]);
 
   return (
     <div className="absolute bottom-0 top-0 w-full">

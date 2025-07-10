@@ -15,7 +15,7 @@ const pending = (
 
 export default function Messages() {
 
-  const { chat, messages } = useChat();
+  const { messages } = useChat();
 
   return (
     messages.map((message, index) => {
@@ -34,7 +34,7 @@ export default function Messages() {
             (
               pending
             ) : (
-              <ChatMessage message={message} chat={chat} index={index} />
+              <ChatMessage message={message} index={index} />
             )
           )}
         </div>

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { db } from "@/lib/instant";
+import { Github, Star } from "lucide-react";
 
 export default function Page() {
   const { user } = db.useAuth();
@@ -25,7 +26,11 @@ export default function Page() {
         </div>
         <div className="space-x-6">
           <Button asChild>
-            <Link href="https://github.com/gxwesterman/glorp" target="_blank">Star on GitHub</Link>
+            <Link href="https://github.com/gxwesterman/glorp" target="_blank">
+              <Github />
+              Star on GitHub
+              <Star />
+            </Link>
           </Button>
           <Button variant="secondary" size="sm" asChild className="bg-radial-[at_0%_25%] from-teal-700 to-teal-900 hover:to-teal-700 text-foreground transition-colors font-semibold shadow">
             <Link href={`${user ? "/chat" : "/login"}`}>Log In</Link>

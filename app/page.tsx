@@ -14,7 +14,7 @@ export default function Page() {
     <div className="flex flex-col min-h-screen">
       <header className="h-16 px-8 flex items-center justify-between">
         <div className="text-lg flex gap-2">
-          Glorp
+          <span className="w-0 overflow-hidden sm:w-full transition-[width]">Glorp</span>
           <Image
             src="/glorp.svg"
             width={30}

@@ -30,7 +30,7 @@ export default function Layout() {
       <ChatProvider>
         <AppSidebar />
         <CustomTrigger />
-        <main className="relative flex w-full flex-1 flex-col overflow-hidden transition-[width,height] h-screen">
+        <main className="relative flex w-full flex-1 flex-col overflow-hidden transition-[width,height] h-dvh min-h-dvh">
           <Chat />
           <ChatForm />
         </main>

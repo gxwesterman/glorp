@@ -4,6 +4,7 @@ import React from "react";
 import { useChat } from "@/contexts/ChatContext";
 import { Dot } from "lucide-react";
 import { ChatMessage } from "@/components/ChatMessage";
+import { useIsMobile } from "@/hooks/use-mobile"
 
 const pending = (
   <div className="flex" key="pending">
@@ -15,12 +16,13 @@ const pending = (
 
 export default function Messages() {
 
+  const isMobile = useIsMobile();
   const { messages } = useChat();
 
   return (
     messages.map((message, index) => {
       return (
-        <div key={message.id} className={`${index === messages.length - 1 && "min-h-160"}`}>
+        <div key={message.id} className={`${index === messages.length - 1 && (isMobile ? "min-h-100" : "min-h-160")}`}>
           {message.type === "question" ? (
             <div className="flex justify-end">
               <div className="relative inline-block max-w-[80%] break-words rounded-2xl bg-secondary/50 p-4 text-left">

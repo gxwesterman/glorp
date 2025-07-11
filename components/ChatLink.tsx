@@ -61,18 +61,13 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
               <div className="truncate max-w-[75%] font-medium text-muted-foreground">
                 {chat.title}
               </div>
-              {chat.messages.find(message =>
-                message.status === "streaming" || message.status === "pending"
-              ) ? (
-                <Loader className="animate-spin" />
-              ) : (
-                <button
-                  className="cursor-pointer hover:bg-primary/20 rounded-md p-1.5 right-1 absolute translate-x-full transition-transform group-hover/item:translate-x-0"
-                  onMouseDown={(e) => deleteChat(e, chat)}
-                >
-                  <X className="h-4 w-4 text-muted-foreground" />
-                </button>
-              )}
+              {chat.messages.find(message => message.status === "streaming" || message.status === "pending") && <Loader className="animate-spin" />}
+              <button
+                className="bg-sidebar-accent cursor-pointer hover:bg-teal-700 rounded-md p-1.5 right-0 absolute translate-x-full transition-transform group-hover/item:-translate-x-1"
+                onMouseDown={(e) => deleteChat(e, chat)}
+              >
+                <X className="h-4 w-4 text-muted-foreground" />
+              </button>
             </a>
           )}
       </SidebarMenuButton>

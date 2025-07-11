@@ -11,9 +11,9 @@ export default function Page() {
   const { user } = db.useAuth();
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-dvh">
       <header className="h-16 px-8 flex items-center justify-between">
-        <div className="text-lg flex sm:gap-2 pt-3">
+        <div className="text-lg flex sm:gap-2 pt-2.5">
           <span className="w-0 overflow-hidden sm:w-full transition-[width]">Glorp</span>
           <Image
             src="/glorp.svg"
@@ -53,15 +53,29 @@ export default function Page() {
           </Button>
         </div>
       </main>
-      <Image
-        className="fixed -right-60 -bottom-60 z-0 opacity-70"
-        src="/arc.svg"
-        width={1000}
-        height={1000}
-        alt="Logo"
-        placeholder="data:image/svg+xml,%3Csvg%20width%3D%22349%22%20height%3D%22349%22%20viewBox%3D%220%200%20349%20349%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20filter%3D%22url(%23filter0_ii_0_1)%22%3E%3Cpath%20d%3D%22M312.263%2080.241C312.263%2078.706%20312.263%2077.9384%20312.243%2077.2895C311.557%2055.1943%20293.806%2037.4427%20271.711%2036.757C271.062%2036.7368%20270.294%2036.7368%20268.759%2036.7368C260.572%2036.7368%20256.479%2036.7368%20253.017%2036.8443C135.176%2040.5016%2040.5016%20135.176%2036.8442%20253.017C36.7368%20256.479%2036.7368%20260.572%2036.7368%20268.759C36.7368%20270.294%2036.7368%20271.062%2036.757%20271.711C37.4427%20293.806%2055.1943%20311.557%2077.2895%20312.243C77.9385%20312.263%2078.7059%20312.263%2080.241%20312.263H250.324C269.038%20312.263%20278.396%20312.263%20285.819%20309.324C296.563%20305.07%20305.07%20296.563%20309.324%20285.819C312.263%20278.396%20312.263%20269.038%20312.263%20250.324V80.241Z%22%20fill%3D%22%231B9388%22%2F%3E%3C%2Fg%3E%3Cdefs%3E%3Cfilter%20id%3D%22filter0_ii_0_1%22%20x%3D%2226.7368%22%20y%3D%2226.7368%22%20width%3D%22295.526%22%20height%3D%22295.526%22%20filterUnits%3D%22userSpaceOnUse%22%20color-interpolation-filters%3D%22sRGB%22%3E%3CfeFlood%20flood-opacity%3D%220%22%20result%3D%22BackgroundImageFix%22%2F%3E%3CfeBlend%20mode%3D%22normal%22%20in%3D%22SourceGraphic%22%20in2%3D%22BackgroundImageFix%22%20result%3D%22shape%22%2F%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20type%3D%22matrix%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22%20result%3D%22hardAlpha%22%2F%3E%3CfeOffset%20dx%3D%2210%22%20dy%3D%2210%22%2F%3E%3CfeGaussianBlur%20stdDeviation%3D%225%22%2F%3E%3CfeComposite%20in2%3D%22hardAlpha%22%20operator%3D%22arithmetic%22%20k2%3D%22-1%22%20k3%3D%221%22%2F%3E%3CfeColorMatrix%20type%3D%22matrix%22%20values%3D%220%200%200%200%200%200%200%200%200%201%200%200%200%200%200.916666%200%200%200%200.25%200%22%2F%3E%3CfeBlend%20mode%3D%22normal%22%20in2%3D%22shape%22%20result%3D%22effect1_innerShadow_0_1%22%2F%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20type%3D%22matrix%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22%20result%3D%22hardAlpha%22%2F%3E%3CfeOffset%20dx%3D%22-10%22%20dy%3D%22-10%22%2F%3E%3CfeGaussianBlur%20stdDeviation%3D%225%22%2F%3E%3CfeComposite%20in2%3D%22hardAlpha%22%20operator%3D%22arithmetic%22%20k2%3D%22-1%22%20k3%3D%221%22%2F%3E%3CfeColorMatrix%20type%3D%22matrix%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200.25%200%22%2F%3E%3CfeBlend%20mode%3D%22normal%22%20in2%3D%22effect1_innerShadow_0_1%22%20result%3D%22effect2_innerShadow_0_1%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3C%2Fsvg%3E"
-        style={{ maxHeight: 1000 }}
-      />
+      <svg className="fixed z-10 -right-60 -bottom-60 z-0 opacity-70 sm:size-200 lg:size-250 size-150 transition-[width,height]" width="349" height="349" viewBox="0 0 349 349" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#filter0_ii_0_1)">
+          <path className="hover:cursor-pointer" d="M312.263 80.241C312.263 78.706 312.263 77.9384 312.243 77.2895C311.557 55.1943 293.806 37.4427 271.711 36.757C271.062 36.7368 270.294 36.7368 268.759 36.7368C260.572 36.7368 256.479 36.7368 253.017 36.8443C135.176 40.5016 40.5016 135.176 36.8442 253.017C36.7368 256.479 36.7368 260.572 36.7368 268.759C36.7368 270.294 36.7368 271.062 36.757 271.711C37.4427 293.806 55.1943 311.557 77.2895 312.243C77.9385 312.263 78.7059 312.263 80.241 312.263H250.324C269.038 312.263 278.396 312.263 285.819 309.324C296.563 305.07 305.07 296.563 309.324 285.819C312.263 278.396 312.263 269.038 312.263 250.324V80.241Z" fill="#1B9388"/>
+        </g>
+        <defs>
+          <filter id="filter0_ii_0_1" x="26.7368" y="26.7368" width="295.526" height="295.526" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+            <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+            <feOffset dx="10" dy="10"/>
+            <feGaussianBlur stdDeviation="5"/>
+            <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 1 0 0 0 0 0.916666 0 0 0 0.25 0"/>
+            <feBlend mode="normal" in2="shape" result="effect1_innerShadow_0_1"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+            <feOffset dx="-10" dy="-10"/>
+            <feGaussianBlur stdDeviation="5"/>
+            <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+            <feBlend mode="normal" in2="effect1_innerShadow_0_1" result="effect2_innerShadow_0_1"/>
+          </filter>
+        </defs>
+      </svg>
     </div>
   )
 }

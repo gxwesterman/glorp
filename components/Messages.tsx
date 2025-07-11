@@ -4,7 +4,6 @@ import React from "react";
 import { useChat } from "@/contexts/ChatContext";
 import { Dot } from "lucide-react";
 import { ChatMessage } from "@/components/ChatMessage";
-import { useIsMobile } from "@/hooks/use-mobile"
 
 const pending = (
   <div className="flex" key="pending">
@@ -15,8 +14,6 @@ const pending = (
 );
 
 export default function Messages() {
-
-  const isMobile = useIsMobile();
   const { messages } = useChat();
 
   return (

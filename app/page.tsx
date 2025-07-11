@@ -13,7 +13,7 @@ export default function Page() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="h-16 px-8 flex items-center justify-between">
-        <div className="text-lg flex sm:gap-2">
+        <div className="text-lg flex sm:gap-2 pt-3">
           <span className="w-0 overflow-hidden sm:w-full transition-[width]">Glorp</span>
           <Image
             src="/glorp.svg"

@@ -7,6 +7,7 @@ import { ChatProvider } from "@/contexts/ChatContext";
 import Chat from "@/components/Chat";
 import { db } from "@/lib/instant";
 import { redirect } from "next/navigation";
+import { CustomTrigger } from "@/components/CustomTrigger";
 
 export default function Layout() {
 
@@ -28,7 +29,8 @@ export default function Layout() {
     <SidebarProvider>
       <ChatProvider>
         <AppSidebar />
-        <main className="relative flex w-full flex-1 flex-col overflow-hidden transition-[width,height]">
+        <CustomTrigger />
+        <main className="relative flex w-full flex-1 flex-col overflow-hidden transition-[width,height] h-screen">
           <Chat />
           <ChatForm />
         </main>

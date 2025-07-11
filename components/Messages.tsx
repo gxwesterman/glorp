@@ -22,7 +22,7 @@ export default function Messages() {
   return (
     messages.map((message, index) => {
       return (
-        <div key={message.id} className={`${index === messages.length - 1 && (isMobile ? "min-h-120" : "min-h-160")}`}>
+        <div key={message.id} className={`${index === messages.length - 1 && "min-h-[calc(100vh-20rem)]"}`}>
           {message.type === "question" ? (
             <div className="flex justify-end">
               <div className="relative inline-block max-w-[80%] break-words rounded-2xl bg-secondary/50 p-4 text-left">

@@ -1,10 +1,12 @@
+
 export default function Blob() {
+
   function handleClick() {
-    
-  };
+    console.log("glorp");
+  }
 
   return (
-    <svg className="fixed z-5 -right-60 -bottom-60 z-0 opacity-70 sm:size-200 lg:size-250 size-150 transition-[width,height]" width="349" height="349" viewBox="0 0 349 349" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className="fixed z-10 -right-60 -bottom-60 z-0 opacity-70 sm:size-200 lg:size-250 size-150 transition-[width,height]" width="349" height="349" viewBox="0 0 349 349" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g filter="url(#filter0_ii_0_1)">
         <path
           onClick={handleClick}

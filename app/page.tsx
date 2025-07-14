@@ -38,14 +38,14 @@ export default function Page() {
           </Button>
         </div>
       </header>
-      <main className="flex-1 relative z-10">
+      <main className="flex-1 relative">
         <div className="container mx-auto flex flex-col items-start py-10 px-4">
-          <h1 className="text-start mt-10 text-6xl font-bold tracking-tighter mb-4">Welcome to the Best AI Chatbot</h1>
-          <p className="max-w-[600px] text-muted-foreground text-xl mb-8 text-start">Blazingly fast, beautifully highlighted, completely synced, persistent storage, buttery smooth.</p>
+          <h1 className="z-15 text-start mt-10 text-6xl font-bold tracking-tighter mb-4">Welcome to the Best AI Chatbot</h1>
+          <p className="z-15 max-w-[600px] text-muted-foreground text-xl mb-8 text-start">Blazingly fast, beautifully highlighted, completely synced, persistent storage, buttery smooth.</p>
           <Button
             asChild
             variant="secondary"
-            className="bg-radial-[at_0%_25%] from-teal-700 to-teal-900 hover:to-teal-700 text-foreground transition-colors font-semibold shadow"
+            className="z-15 bg-radial-[at_0%_25%] from-teal-700 to-teal-900 hover:to-teal-700 text-foreground transition-colors font-semibold shadow"
           >
             <Link href={`${user ? "/chat" : "/login"}`}>
               Ask Glorp

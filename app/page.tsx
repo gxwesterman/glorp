@@ -25,7 +25,7 @@ export default function Page() {
             style={{ maxHeight: 30 }}
           />
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6 z-10">
           <Button asChild>
             <Link href="https://github.com/gxwesterman/glorp" target="_blank">
               <Github />

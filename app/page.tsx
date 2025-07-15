@@ -14,7 +14,7 @@ export default function Page() {
   return (
     <div className="flex flex-col min-h-dvh">
       <header className="h-16 px-8 flex items-center justify-between">
-        <div className="text-lg flex sm:gap-2 pt-2.5">
+        <div className="text-lg flex sm:gap-2 pt-2.5 z-10">
           <span className="w-0 overflow-hidden sm:w-full transition-[width]">Glorp</span>
           <Image
             src="/glorp.svg"

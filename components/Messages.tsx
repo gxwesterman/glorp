@@ -23,7 +23,7 @@ export default function Messages() {
           {message.type === "question" ? (
             <div className="flex justify-end">
               <div className="relative inline-block max-w-[80%] break-words rounded-2xl bg-secondary/50 p-4 text-left">
-                <div className="whitespace-pre overflow-x-auto prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-teal prose-pre:p-0 dark:prose-invert">
+                <div className="prose max-w-none prose-pre:m-0 prose-pre:bg-transparent prose-teal prose-pre:p-0 dark:prose-invert">
                   {message.text}
                 </div>
               </div>

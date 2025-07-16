@@ -67,9 +67,8 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
           ) : (
             <div
               onDoubleClick={handleDoubleClick}
-              onMouseDown={(e) => {
-                const target = e.target as HTMLElement;
-                if (!target.closest("button")) {
+              onMouseDown={() => {
+                if (!open) {
                   window.history.pushState({}, "", `/chat/${chat.urlId}`);
                 }
               }}

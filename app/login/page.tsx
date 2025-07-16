@@ -84,7 +84,7 @@ function EmailStep({ onSendEmail }: { onSendEmail: (email: string) => void }) {
       <Button
         variant="secondary"
         type="submit"
-        className="bg-radial-[at_0%_25%] from-teal-700 to-teal-900 hover:to-teal-700 text-foreground transition-colors font-semibold shadow w-full"
+        className="w-full"
       >
         Send Code
       </Button>
@@ -126,7 +126,7 @@ function CodeStep({ sentEmail }: { sentEmail: string }) {
       <Button
         variant="secondary"
         type="submit"
-        className="bg-radial-[at_0%_25%] from-teal-700 to-teal-900 hover:to-teal-700 text-foreground transition-colors font-semibold shadow w-full"
+        className="w-full"
       >
         Verify Code
       </Button>

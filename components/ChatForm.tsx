@@ -69,7 +69,7 @@ export default function ChatForm() {
               <Button
                 type="submit"
                 variant="secondary"
-                className={cn(!input ? "opacity-50 hover:cursor-not-allowed" : "hover:to-teal-700", "bg-radial-[at_0%_25%] from-teal-700 to-teal-900 text-foreground transition-colors font-semibold shadow h-9 w-9")}
+                className={cn(!input ? "opacity-50 hover:cursor-not-allowed" : "hover:to-teal-700", "h-9 w-9")}
               >
                 <ArrowUp className="!size-5" />
               </Button>

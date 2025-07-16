@@ -45,7 +45,6 @@ export function AppSidebar() {
         <SidebarMenu className="px-3">
           <Button
             variant="secondary"
-            className="bg-radial-[at_0%_25%] from-teal-700 to-teal-900 hover:to-teal-700 text-foreground transition-colors font-semibold shadow"
             onClick={() =>window.history.pushState({}, "", "/chat")}
           >
             New Chat

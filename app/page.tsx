@@ -33,7 +33,7 @@ export default function Page() {
               <Star />
             </Link>
           </Button>
-          <Button variant="secondary" size="sm" asChild className="bg-radial-[at_0%_25%] from-teal-700 to-teal-900 hover:to-teal-700 text-foreground transition-colors font-semibold shadow">
+          <Button size="sm" asChild className="bg-radial-[at_0%_25%] from-teal-700 to-teal-900 hover:to-teal-700 text-foreground transition-colors font-semibold shadow">
             <Link href={`${user ? "/chat" : "/login"}`}>Log In</Link>
           </Button>
         </div>
@@ -45,7 +45,7 @@ export default function Page() {
           <Button
             asChild
             variant="secondary"
-            className="z-15 bg-radial-[at_0%_25%] from-teal-700 to-teal-900 hover:to-teal-700 text-foreground transition-colors font-semibold shadow"
+            className="z-15"
           >
             <Link href={`${user ? "/chat" : "/login"}`}>
               Ask Glorp

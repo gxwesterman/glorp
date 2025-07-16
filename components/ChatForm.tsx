@@ -50,8 +50,8 @@ export default function ChatForm() {
   }
 
   return (
-    <div className="absolute bottom-0 w-full px-4">
-      <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col text-center">
+    <div className="absolute bottom-0 w-full px-4 pointer-events-none">
+      <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col text-center pointer-events-auto">
         <div className="relative rounded-lg p-2 pb-0 backdrop-blur-lg bg-secondary/70 shadow shadow-background">
           <form
             onSubmit={handleSubmit}

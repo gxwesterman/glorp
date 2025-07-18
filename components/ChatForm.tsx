@@ -34,8 +34,8 @@ export default function ChatForm() {
       textAreaRef.current.style.height = 'auto';
     }
     if (pageChatId === 'chat') {
-        pageChatId = startChat(input, user.id);
-        window.history.pushState({}, '', window.location.href + `/${pageChatId}`);
+      pageChatId = startChat(input, user.id);
+      window.history.pushState({}, '', window.location.href + `/${pageChatId}`);
     }
     setInput('');
     startStream(pageChatId, input, messages);

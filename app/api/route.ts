@@ -59,11 +59,22 @@ async function editChat(id: string, title: string) {
 
 export async function POST(req: Request) {
   const { answerId, chatId, message, messages } = await req.json();
-  const history = messages.map((message: { type: string, text: string }) => {
+  const chatQuery = {
+    chats: {
+      $: {
+        where: {
+          urlId: chatId
+        }
+      },
+    },
+  };
+  const data = await db.query(chatQuery);
+  const history = messages.map((message: { type: string, text: string }) =>{
     return {
       role: message.type === 'question' ? 'user' : 'model',
       parts: [{ text: message.text }]
-    }});
+    }
+  });
 
   const chat = ai.chats.create({
     model: "gemini-2.0-flash",
@@ -93,10 +104,11 @@ export async function POST(req: Request) {
     await updateMessage(answerId, response, "streaming");
   }
 
-  const title = await chat.sendMessage({ message: "Give me a title no more than 3 words that summarizes this content. Do not add any punctuation." });
-
   await updateMessage(answerId, response, "done");
-  await editChat(chatId, title.text ?? "");
+  if (!data.chats[0].edited) {
+    const title = await chat.sendMessage({ message: "Give me a title no more than 3 words that summarizes this content. Do not add any punctuation." });
+    await editChat(chatId, title.text ?? "");
+  }
 
   return Response.json({ message: 'Done' })
 }

@@ -27,7 +27,7 @@ export function addMessage(text: string, html: string, type: string, chatId: str
 }
 
 export function deleteChat(
-  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  e: React.MouseEvent<HTMLButtonElement | HTMLDivElement, MouseEvent>,
   chat: Chat
 ) {
   e.stopPropagation();

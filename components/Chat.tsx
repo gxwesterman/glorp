@@ -7,13 +7,14 @@ import Copy from "@/components/Copy";
 import { usePathname } from "next/navigation";
 import { useChat } from "@/contexts/ChatContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import NewChat from "@/components/NewChat";
 
 export default function Chat() {
   
   const scrollRef = useRef<HTMLDivElement>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const { chat } = useChat();
+  const { chat, chatKey } = useChat();
   const prevPathname = useRef(pathname);
   const prevMessageCount = useRef(chat.messages.length);
 
@@ -110,11 +111,15 @@ export default function Chat() {
     prevMessageCount.current = chat.messages.length;
   }, [pathname, chat.messages.length]);
 
+  if (pathname === "/chat") {
+    return <NewChat key={chatKey} />;
+  }
+
   return (
     <div className="absolute bottom-0 top-0 w-full">
       <ScrollArea
         ref={scrollRef}
-        className="absolute inset-0 pt-3.5 h-full"
+        className="absolute inset-0 h-full"
       >
         <div ref={messagesRef} className="mx-auto flex w-full max-w-3xl flex-col space-y-12 p-4 mb-[144px]">
           <Messages />

@@ -19,7 +19,7 @@ import Image from 'next/image';
 
 export function AppSidebar() {
 
-  const { chats } = useChat();
+  const { chats, chatKey, setChatKey } = useChat();
   const pathname = usePathname();
   const activeUrlId = pathname.split("/").pop() || "";
 
@@ -45,7 +45,7 @@ export function AppSidebar() {
         <SidebarMenu className="px-3">
           <Button
             variant="secondary"
-            onClick={() =>window.history.pushState({}, "", "/chat")}
+            onClick={() => { setChatKey(chatKey + 1); window.history.pushState({}, "", "/chat"); }}
           >
             New Chat
           </Button>

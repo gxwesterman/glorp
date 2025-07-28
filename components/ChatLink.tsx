@@ -20,14 +20,12 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
-import { useChat } from "@/contexts/ChatContext";
 
 export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlId: string }) {
   const [isEditing, setIsEditing] = useState(false);
   const wrapperRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [alertOpen, setAlertOpen] = useState(false);
-  const { chatKey, setChatKey } = useChat();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -65,7 +63,6 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
               onDoubleClick={handleDoubleClick}
               onMouseDown={(e) => {
                 if (e.button === 0 && !alertOpen && !isEditing) {
-                  setChatKey(chatKey + 1);
                   window.history.pushState({}, "", `/chat/${chat.urlId}`);
                 }
               }}

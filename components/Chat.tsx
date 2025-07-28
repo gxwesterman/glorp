@@ -6,6 +6,7 @@ import { createRoot } from "react-dom/client";
 import Copy from "@/components/Copy";
 import { usePathname } from "next/navigation";
 import { useChat } from "@/contexts/ChatContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Chat() {
   
@@ -95,10 +96,15 @@ export default function Chat() {
       behavior = "smooth";
     }
 
-    scrollRef.current.scroll({
-      top: scrollRef.current.scrollHeight,
-      behavior,
-    });
+    const scrollArea = scrollRef.current?.querySelector(
+      '[data-radix-scroll-area-viewport]'
+    )
+    if (scrollArea) {
+      scrollArea.scroll({
+        top: scrollArea.scrollHeight,
+        behavior,
+      })
+    }
 
     prevPathname.current = pathname;
     prevMessageCount.current = chat.messages.length;
@@ -106,14 +112,14 @@ export default function Chat() {
 
   return (
     <div className="absolute bottom-0 top-0 w-full">
-      <div
+      <ScrollArea
         ref={scrollRef}
-        className="absolute inset-0 overflow-y-scroll pt-3.5 pb-[144px]"
+        className="absolute inset-0 pt-3.5 h-full"
       >
-        <div ref={messagesRef} className="mx-auto flex w-full max-w-3xl flex-col space-y-12 p-4">
+        <div ref={messagesRef} className="mx-auto flex w-full max-w-3xl flex-col space-y-12 p-4 mb-[144px]">
           <Messages />
         </div>
-      </div>
+      </ScrollArea>
     </div>
   );
 }

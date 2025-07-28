@@ -20,12 +20,14 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
+import { useChat } from "@/contexts/ChatContext";
 
 export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlId: string }) {
   const [isEditing, setIsEditing] = useState(false);
   const wrapperRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [alertOpen, setAlertOpen] = useState(false);
+  const { chatKey, setChatKey } = useChat();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -63,6 +65,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
               onDoubleClick={handleDoubleClick}
               onMouseDown={(e) => {
                 if (e.button === 0 && !alertOpen && !isEditing) {
+                  setChatKey(chatKey + 1);
                   window.history.pushState({}, "", `/chat/${chat.urlId}`);
                 }
               }}
@@ -77,7 +80,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
                   onKeyDown={(e) => handleKeyDown(e)}
                 />
                 {chat.messages.find(message => message.status === "streaming" || message.status === "pending") &&
-                  <Loader className="animate-spin h-4 w-4 text-muted-foreground absolute right-2" />
+                  <Loader className="animate-spin h-4 w-4 text-muted-foreground absolute right-2.5" />
                 }
                 <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
                   <AlertDialogTrigger asChild>

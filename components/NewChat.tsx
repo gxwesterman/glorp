@@ -45,7 +45,7 @@ export default function NewChat() {
                 <TabsContent value="learn">
                   <PromptButton>What are some of the environmental impacts of AI?</PromptButton>
                   <PromptButton>Is AI profitable?</PromptButton>
-                  <PromptButton>Is AI a bubble that depends wholly on a cabal of morally bankrupt tech bros leeching off of greedy CEOs and an increasingly ignorant general public that lives only to satiate their insatiable dopamine addiction with slop day in and day out?</PromptButton>
+                  <PromptButton>Is AI a bubble that depends wholly on a cabal of morally bankrupt tech bros leeching off of greedy CEOs and an increasingly ignorant general public that exists only to mindlessly satiate their insatiable dopamine addiction with slop?</PromptButton>
                   <PromptButton>How many types of bears are there?</PromptButton>
                 </TabsContent>
                 <TabsContent value="code">

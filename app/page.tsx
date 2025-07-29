@@ -33,7 +33,7 @@ export default function Page() {
               <Star />
             </Link>
           </Button>
-          <Button size="sm" asChild className="bg-radial-[at_0%_25%] from-teal-700 to-teal-900 hover:to-teal-700 text-foreground transition-colors font-semibold shadow">
+          <Button size="sm" asChild variant="secondary">
             <Link href={`${user ? "/chat" : "/login"}`}>Log In</Link>
           </Button>
         </div>

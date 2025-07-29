@@ -14,7 +14,7 @@ export default function Chat() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const { chat, chatKey } = useChat();
+  const { chat, chatKey, input } = useChat();
   const prevPathname = useRef(pathname);
   const prevMessageCount = useRef(chat.messages.length);
 
@@ -111,7 +111,7 @@ export default function Chat() {
     prevMessageCount.current = chat.messages.length;
   }, [pathname, chat.messages.length]);
 
-  if (pathname === "/chat") {
+  if (pathname === "/chat" && !input) {
     return <NewChat key={chatKey} />;
   }
 

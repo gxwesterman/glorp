@@ -49,6 +49,8 @@ type ChatProviderState = {
   startStream: (chatId: string, input: string, messages: { [x: string]: string; id: string; }[]) => Promise<void>,
   chatKey: number,
   setChatKey: (chatKey: number) => void,
+  input: string,
+  setInput: (input: string) => void,
 }
 
 const initialState: ChatProviderState = {
@@ -59,6 +61,8 @@ const initialState: ChatProviderState = {
   startStream: async () => undefined,
   chatKey: 0,
   setChatKey: () => undefined,
+  input: '',
+  setInput: () => undefined,
 }
 
 const ChatProviderContext = createContext<ChatProviderState>(initialState)
@@ -89,6 +93,7 @@ export function ChatProvider({
   const messages = chat ? chat.messages : [];
   const [wasChatPresent, setWasChatPresent] = useState<boolean>(false);
   const [chatKey, setChatKey] = useState(0);
+  const [input, setInput] = useState('');
 
   useEffect(() => {
     if (chat && chat.id !== "chat") {
@@ -103,7 +108,7 @@ export function ChatProvider({
   if (!data || (pageChatId !== 'chat' && chat.id === "chat")) return;
 
   return (
-    <ChatProviderContext.Provider {...props} value={{ user, startStream, chat, chats, messages, chatKey, setChatKey }}>
+    <ChatProviderContext.Provider {...props} value={{ user, startStream, chat, chats, messages, chatKey, setChatKey, input, setInput }}>
       {children}
     </ChatProviderContext.Provider>
   )

@@ -12,9 +12,8 @@ import { cn } from "@/lib/utils";
 export default function ChatForm() {
   const pathname = usePathname();
   let pageChatId = (pathname.split('/').pop() || '');
-  const [input, setInput] = useState('');
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { user, messages, startStream } = useChat();
+  const { input, setInput, user, messages, startStream } = useChat();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (

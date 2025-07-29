@@ -2,7 +2,7 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import React, { useRef, useState } from "react";
+import { KeyboardEvent, useRef } from "react";
 import { usePathname } from 'next/navigation';
 import { ArrowUp } from 'lucide-react';
 import { useChat } from "@/contexts/ChatContext";
@@ -15,7 +15,7 @@ export default function ChatForm() {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { input, setInput, user, messages, startStream } = useChat();
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (
       ((e.key === 'Enter' || e.key === 'NumpadEnter') && !e.shiftKey)
     ) {

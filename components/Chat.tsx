@@ -45,7 +45,7 @@ export default function Chat() {
         });
       },
       {
-        root: scrollRef.current,
+        root: messagesRef.current,
         threshold: 0.1,
       }
     );
@@ -111,10 +111,6 @@ export default function Chat() {
     prevMessageCount.current = chat.messages.length;
   }, [pathname, chat.messages.length]);
 
-  if (pathname === "/chat" && !input) {
-    return <NewChat key={chatKey} />;
-  }
-
   return (
     <div className="absolute bottom-0 top-0 w-full">
       <ScrollArea
@@ -122,7 +118,7 @@ export default function Chat() {
         className="absolute inset-0 h-full"
       >
         <div ref={messagesRef} className="mx-auto flex w-full max-w-3xl flex-col space-y-12 p-4 mb-[144px]">
-          <Messages />
+          {pathname === "/chat" && !input ? <NewChat key={chatKey} /> : <Messages />}
         </div>
       </ScrollArea>
     </div>

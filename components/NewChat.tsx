@@ -3,13 +3,20 @@ import React from "react"
 import { BookOpen, Code, Telescope } from "lucide-react";
 import Image from "next/image";
 import { useChat } from "@/contexts/ChatContext";
+import { startChat } from "@/lib/chat-utils";
 
 function PromptButton({ children }: { children: string }) {
-  const { setInput } = useChat();
+  const { user, startStream } = useChat();
+
+  function handleClick() {
+    const pageChatId = startChat(children, user.id);
+    window.history.pushState({}, '', window.location.href + `/${pageChatId}`);
+    startStream(pageChatId, children, []);
+  }
 
   return (
     <div className="flex items-start gap-2 border-t border-secondary/40 py-1 first:border-none">
-      <button onClick={() => setInput(children)} className="w-full rounded-md py-2 text-left text-secondary-foreground hover:bg-secondary/50 sm:px-3">
+      <button onClick={handleClick} className="w-full rounded-md py-2 text-left text-secondary-foreground hover:bg-secondary/50 sm:px-3">
         <span className="text-muted-foreground">{children}</span>
       </button>
     </div>

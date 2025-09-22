@@ -85,7 +85,7 @@ export default function ChatLink({ chat, activeUrlId }: { chat: Chat, activeUrlI
                       <div className="pointer-events-none absolute bottom-0 right-[100%] top-0 h-8 w-8 bg-gradient-to-l from-sidebar-accent to-transparent opacity-0 group-hover/link:opacity-100"></div>
                       <button
                         onMouseDown={(e) => e.stopPropagation()}
-                        className="rounded-md p-1.5 hover:bg-teal-500/30"
+                        className="rounded-md p-1.5 hover:bg-teal-500/30 hover:cursor-pointer"
                       >
                         <X className="h-4 w-4 text-muted-foreground" />
                       </button>

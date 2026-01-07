@@ -83,25 +83,12 @@ export async function POST(req: Request) {
     
   const stream = await chat.sendMessageStream({ message: message });
   let response = '';
-  let buffer = '';
-  const BUFFER_LIMIT = 30;
 
   for await (const chunk of stream) {
     if (chunk.text) {
-      for (const char of chunk.text) {
-        response += char;
-        buffer += char;
-
-        if (buffer.length >= BUFFER_LIMIT) {
-          await updateMessage(answerId, response, "streaming");
-          buffer = '';
-        }
-      }
+      response += chunk.text;
+      await updateMessage(answerId, response, "streaming");
     }
-  }
-
-  if (buffer.length > 0) {
-    await updateMessage(answerId, response, "streaming");
   }
 
   await updateMessage(answerId, response, "done");

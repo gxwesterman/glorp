@@ -118,7 +118,7 @@ export const useChat = () => {
   const context = useContext(ChatProviderContext)
 
   if (context === undefined)
-    throw new Error("useChat must be used within a ChatProvider")
+    throw new Error("useChat must be used within a ChatProvider test")
 
   return context
 }
